@@ -1,0 +1,9 @@
+Lições Aprendidas:
+
+- Raio é muito sensível. Varia muito;
+	- Talvez seja interessante que o raio seja regulado manualmente, com um potenciômetro;
+
+- Projetor esquenta muito;
+- Vento pode descalibrar a tela;
+- Desligar proteção de tela / economia de energia;
+- Antes de calibrar é necessário ajustar a grid à área de tela.

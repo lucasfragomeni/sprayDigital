@@ -1,0 +1,3 @@
+ -Xms64m -Xmx1526m
+SprayDigital
+sprayDigital.jar,processingUtil.jar,libTUIO.jar,TUIO.jar,opengl.jar,tritonus_share.jar,json-simple-1.1.jar,jogl.jar,gluegen-rt.jar,Ess.jar,libgluegen-rt.jnilib,libjogl_awt.jnilib,libjogl_cg.jnilib,libjogl.jnilib

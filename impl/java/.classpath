@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="lib/core.jar"/>
+	<classpathentry kind="lib" path="lib/Ess.jar"/>
+	<classpathentry kind="lib" path="lib/gluegen-rt.jar"/>
+	<classpathentry kind="lib" path="lib/jogl.jar"/>
+	<classpathentry kind="lib" path="lib/libgluegen-rt.jnilib"/>
+	<classpathentry kind="lib" path="lib/libjogl_awt.jnilib"/>
+	<classpathentry kind="lib" path="lib/libjogl_cg.jnilib"/>
+	<classpathentry kind="lib" path="lib/libjogl.jnilib"/>
+	<classpathentry kind="lib" path="lib/opengl.jar"/>
+	<classpathentry kind="lib" path="lib/tritonus_share.jar"/>
+	<classpathentry kind="lib" path="lib/jl1.0.jar"/>
+	<classpathentry kind="lib" path="lib/jsminim.jar"/>
+	<classpathentry kind="lib" path="lib/librxtxSerial.jnilib"/>
+	<classpathentry kind="lib" path="lib/librxtxSerial.so"/>
+	<classpathentry kind="lib" path="lib/minim-spi.jar"/>
+	<classpathentry kind="lib" path="lib/minim.jar"/>
+	<classpathentry kind="lib" path="lib/mp3spi1.9.4.jar"/>
+	<classpathentry kind="lib" path="lib/RXTXcomm.jar"/>
+	<classpathentry kind="lib" path="lib/rxtxSerial.dll"/>
+	<classpathentry kind="lib" path="lib/serial.jar"/>
+	<classpathentry kind="lib" path="lib/tritonus_aos.jar"/>
+	<classpathentry kind="lib" path="lib/libTUIO.jar"/>
+	<classpathentry kind="lib" path="lib/TUIO.jar"/>
+	<classpathentry kind="lib" path="lib/processingUtil.jar"/>
+	<classpathentry kind="lib" path="lib/twitpic4j.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
