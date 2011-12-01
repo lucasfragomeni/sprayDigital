@@ -71,7 +71,7 @@ boolean removeCursor = false;
 
 void addTuioCursor(TuioCursor tuioCursor) {
   if (cursor == null) {
-    smoother.smooth(tuioCursor.getScreenX(width), tuioCursor.getScreenY(height));
+    smoother = new Smoother(tuioCursor.getScreenX(width), tuioCursor.getScreenY(height));
     cursor = new Cursor(smoother.getSmoothedX(), smoother.getSmoothedY(), tuioCursor.getCursorID());
 //    cursor = new Cursor(tuioCursor.getScreenX(width), tuioCursor.getScreenY(height), tuioCursor.getCursorID());
     addCursor = true;

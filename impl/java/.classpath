@@ -19,6 +19,6 @@
 	<classpathentry kind="lib" path="lib/libTUIO.jar"/>
 	<classpathentry kind="lib" path="lib/TUIO.jar"/>
 	<classpathentry kind="lib" path="lib/twitpic4j.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/ProcessingUtil"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/BebopUtil"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

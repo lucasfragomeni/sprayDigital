@@ -18,7 +18,7 @@ public class BibliotecaPadroes {
 	private float movesY[][][];
 
 	private float minopac = -15F;
-	private float maxopac = 15F;
+	private float maxopac = 25F;
 	private float moveX[];
 	private float moveY[];
 	private float opacChange[];

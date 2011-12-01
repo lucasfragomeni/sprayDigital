@@ -6,10 +6,10 @@ import krister.Ess.AudioChannel;
 import krister.Ess.Ess;
 import processing.core.PApplet;
 import processing.core.PImage;
-import cc.bebop.processing.util.MediaMovel;
 import cc.bebop.processing.util.ObjectUtil;
 import cc.bebop.spraydigital.event.RadiusEvent;
 import cc.bebop.spraydigital.event.RadiusListener;
+import cc.bebop.util.MediaMovel;
 import ddf.minim.AudioSnippet;
 import ddf.minim.Minim;
 
