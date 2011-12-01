@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
 <jardesc>
-    <jar path="/Volumes/Dados/Projetos/bebop/sprayDigitalOriginal/impl/processing/SprayDigital/code/sprayDigital.jar"/>
+    <jar path="/Volumes/Dados/Bebop/Desenvolvimento/sprayDigital/impl/processing/SprayDigital/code/sprayDigital.jar"/>
     <options buildIfNeeded="true" compress="true" descriptionLocation="/SprayDigital/jardesc.jardesc" exportErrors="true" exportWarnings="true" includeDirectoryEntries="false" overwrite="true" saveDescription="true" storeRefactorings="false" useSourceFolders="false"/>
     <storedRefactorings deprecationInfo="true" structuralOnly="false"/>
     <selectedProjects/>

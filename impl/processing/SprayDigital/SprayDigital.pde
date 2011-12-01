@@ -11,10 +11,12 @@ import processing.serial.Serial;
 
 TuioProcessing tuio;
 Workspace workspace;
+Smoother smoother;
 
 void setup() {
   tuio = new TuioProcessing(this);
   workspace = new Workspace(this);
+  smoother = new Smoother();
 }
 
 void draw() {
@@ -47,13 +49,13 @@ void draw() {
 }
 
 void keyPressed() {
-  if(key == '-') {
-    smoothing -= 0.1;
-  }
-  else if(key == '=') {
-    smoothing += 0.1;
-  }
-  println(smoothing);
+//  if(key == '-') {
+//    smoothing -= 0.1;
+//  }
+//  else if(key == '=') {
+//    smoothing += 0.1;
+//  }
+//  println(smoothing);
     
   workspace.keyPressed();
 }
@@ -67,20 +69,10 @@ boolean addCursor = false;
 boolean updateCursor = false;
 boolean removeCursor = false;
 
-float smoothing = 0.85;
-float smoothedX = 0;
-float smoothedY = 0;
-
-float smoothCursorPoint(float smoothed, float actual) {
-  return smoothing * smoothed + (1-smoothing) * actual;
-}
-
 void addTuioCursor(TuioCursor tuioCursor) {
   if (cursor == null) {
-    smoothedX = tuioCursor.getScreenX(width);
-    smoothedY = tuioCursor.getScreenY(height);
-    cursor = new Cursor(smoothedX, smoothedY, tuioCursor.getCursorID());
-    //--
+    smoother.smooth(tuioCursor.getScreenX(width), tuioCursor.getScreenY(height));
+    cursor = new Cursor(smoother.getSmoothedX(), smoother.getSmoothedY(), tuioCursor.getCursorID());
 //    cursor = new Cursor(tuioCursor.getScreenX(width), tuioCursor.getScreenY(height), tuioCursor.getCursorID());
     addCursor = true;
   }
@@ -88,12 +80,9 @@ void addTuioCursor(TuioCursor tuioCursor) {
 
 void updateTuioCursor(TuioCursor tuioCursor) {
   if (cursor != null) {
-    //teste
-    smoothedX = smoothCursorPoint(smoothedX, tuioCursor.getScreenX(width));
-    smoothedY = smoothCursorPoint(smoothedY, tuioCursor.getScreenY(height));
-    cursor.setX(smoothedX);
-    cursor.setY(smoothedY);
-    //--
+    smoother.smooth(tuioCursor.getScreenX(width), tuioCursor.getScreenY(height));
+    cursor.setX(smoother.getSmoothedX());
+    cursor.setY(smoother.getSmoothedY());
 //    cursor.setX(tuioCursor.getScreenX(width));
 //    cursor.setY(tuioCursor.getScreenY(height));
     updateCursor = true;
@@ -102,12 +91,9 @@ void updateTuioCursor(TuioCursor tuioCursor) {
 
 void removeTuioCursor(TuioCursor tuioCursor) {
   if (cursor != null) {
-    //teste
-    smoothedX = smoothCursorPoint(smoothedX, tuioCursor.getScreenX(width));
-    smoothedY = smoothCursorPoint(smoothedY, tuioCursor.getScreenY(height));
-    cursor.setX(smoothedX);
-    cursor.setY(smoothedY);
-    //--
+    smoother.smooth(tuioCursor.getScreenX(width), tuioCursor.getScreenY(height));
+    cursor.setX(smoother.getSmoothedX());
+    cursor.setY(smoother.getSmoothedY());
 //    cursor.setX(tuioCursor.getScreenX(width));
 //    cursor.setY(tuioCursor.getScreenY(height));
     removeCursor = true;
