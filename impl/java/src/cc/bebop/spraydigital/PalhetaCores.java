@@ -104,7 +104,7 @@ public class PalhetaCores extends UIComponent implements ColorListener {
 	/**
 	 * Recebe o dado crú do sensor
 	 */
-	@Override
+	//@Override
 	public void colorChanged(ColorEvent event) {
 		indiceCor = Math.min(event.getColor(), 14);
 

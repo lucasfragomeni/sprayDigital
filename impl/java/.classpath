@@ -1,24 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="src"/>
+	<classpathentry excluding="disabled/" kind="src" path="src"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry exported="true" kind="lib" path="lib/core.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/Ess.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/gluegen-rt.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/jogl.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/RXTXcomm.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/twitpic4j.jar"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/BebopUtil"/>
 	<classpathentry exported="true" kind="lib" path="lib/opengl.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/tritonus_share.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/serial.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jogl.jar">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="SprayDigital/lib"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="lib" path="lib/gluegen-rt.jar">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="C:/Users/Igor/Desktop/git/sprayDigital/impl/java/lib"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="lib" path="lib/Ess.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/jl1.0.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/jsminim.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/minim-spi.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/minim.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/mp3spi1.9.4.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/RXTXcomm.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/serial.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/tritonus_aos.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/libTUIO.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/TUIO.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/twitpic4j.jar"/>
-	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/BebopUtil"/>
+	<classpathentry kind="lib" path="lib/tritonus_aos.jar"/>
+	<classpathentry kind="lib" path="lib/tritonus_share.jar"/>
+	<classpathentry kind="lib" path="lib/libTUIO.jar"/>
+	<classpathentry kind="lib" path="lib/TUIO.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

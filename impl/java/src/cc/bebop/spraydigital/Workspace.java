@@ -71,12 +71,14 @@ public class Workspace implements ButtonListener
 		}
 		*/
 		
+		System.err.println("SHIT");
+		
 		twitpicService = new TwitpicService(
 				props.getProperty("twitpic.user"),
 				props.getProperty("twitpic.pass"),
 				props.getProperty("twitpic.text")
 				);
-				
+
 		this.pApplet = pApplet;
 		this.pApplet.size(this.pApplet.screenWidth, this.pApplet.screenHeight, PApplet.OPENGL);
 		this.pApplet.hint(PApplet.ENABLE_OPENGL_4X_SMOOTH);
@@ -92,7 +94,7 @@ public class Workspace implements ButtonListener
 		//Componentes
 		canvas = new Canvas(pApplet);
 		canvas.setBrush(brush);
-		
+
 		palhetaCores = new PalhetaCores(pApplet);
 		palhetaCores.addColorChangeListener(brush);
 
@@ -101,6 +103,7 @@ public class Workspace implements ButtonListener
 		sprayCan.addDistanceChangeListener(brush);
 		sprayCan.addColorChangeListener(palhetaCores);
 		sprayCan.addButtonListener(this);
+
 	}
 
 	public void draw()
@@ -193,7 +196,7 @@ public class Workspace implements ButtonListener
 		}
 	}
 	
-	@Override
+	//@Override
 	public void buttonPressed(ButtonEvent event) {
 		if(event.getAction().equals(ButtonEvent.SALVAR)) {
 			salvar();
