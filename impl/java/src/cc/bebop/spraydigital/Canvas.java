@@ -40,12 +40,12 @@ public class Canvas extends UIComponent implements RadiusListener {
 
 	private LinkedList<PImage> hist;
 
-	public void hist_clear()
+	public void histClear()
 	{
 		hist.clear();
 	}
 
-	public int hist_add()
+	public int histAdd()
 	{
 		if(hist.size() >= HIST_MAX)
 		{
@@ -56,7 +56,7 @@ public class Canvas extends UIComponent implements RadiusListener {
 		return hist.size();
 	}
 
-	public int hist_back()
+	public int histBack()
 	{
 		if(hist.size() <= 1)
 			return hist.size();
@@ -81,8 +81,8 @@ public class Canvas extends UIComponent implements RadiusListener {
 		this.inicializarEfeitosSonoros();
 
 		hist = new LinkedList<PImage>();
-		hist_clear();
-		hist_add();
+		histClear();
+		histAdd();
 	}
 
 	public void setBrush(Brush brush) {
@@ -227,7 +227,7 @@ public class Canvas extends UIComponent implements RadiusListener {
 
 			airspray.stop();
 
-			hist_add();
+			histAdd();
 		}
 	}
 

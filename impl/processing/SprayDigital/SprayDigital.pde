@@ -100,6 +100,22 @@ void removeTuioCursor(TuioCursor tuioCursor) {
   }
 }
 
+void addTuioObject(TuioObject tobj)
+{
+}
+
+void refresh(TuioTime btime)
+{
+}
+
+void removeTuioObject(TuioObject tobj)
+{
+}
+
+void updateTuioObject(TuioObject tobj)
+{
+}
+
 ////////////////
 // Processing //
 ////////////////

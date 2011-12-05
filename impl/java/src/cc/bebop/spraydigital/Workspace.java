@@ -1,13 +1,32 @@
 package cc.bebop.spraydigital;
 
+import java.io.IOException;
+import java.util.Properties;
+
 import processing.core.PApplet;
 import cc.bebop.spraydigital.event.ButtonEvent;
 import cc.bebop.spraydigital.event.ButtonListener;
 import cc.bebop.spraydigital.event.ColorEvent;
 import cc.bebop.spraydigital.network.TwitpicService;
 
-public class Workspace implements ButtonListener {
-
+public class Workspace implements ButtonListener
+{
+	/*
+	 * properties
+	 * 
+	 */
+	private static final String propsPath =
+			"sprayDigital.properties";
+	
+	private static final Properties props =
+			new Properties();
+	
+	/*
+	 * twitpic
+	 * 
+	 */
+	private TwitpicService twitpicService;
+	
 	private PApplet pApplet;
 
 	private static final int FUNDO = 255;
@@ -20,7 +39,44 @@ public class Workspace implements ButtonListener {
 	
 	private static final long DELAY_CLICK = 500;
 
-	public Workspace(PApplet pApplet) {
+	public Workspace(PApplet pApplet)
+	{
+		/*
+		 * read properties file
+		 * 
+		 */
+		try
+		{
+			props.load(pApplet.createReader(propsPath));
+		}
+		
+		catch (IOException e)
+		{
+			System.out.println("Ocorreu um erro ao carregar o arquivo de propriedades: " + e.getMessage());
+			e.printStackTrace();
+		}
+		
+		/*
+		if(true)
+		{
+			try
+			{
+				throw new RuntimeException();
+			}
+			
+			catch(RuntimeException e)
+			{
+				e.printStackTrace();
+			}
+		}
+		*/
+		
+		twitpicService = new TwitpicService(
+				props.getProperty("twitpic.user"),
+				props.getProperty("twitpic.pass"),
+				props.getProperty("twitpic.text")
+				);
+				
 		this.pApplet = pApplet;
 		this.pApplet.size(this.pApplet.screenWidth, this.pApplet.screenHeight, PApplet.OPENGL);
 		this.pApplet.hint(PApplet.ENABLE_OPENGL_4X_SMOOTH);
@@ -36,7 +92,7 @@ public class Workspace implements ButtonListener {
 		//Componentes
 		canvas = new Canvas(pApplet);
 		canvas.setBrush(brush);
-
+		
 		palhetaCores = new PalhetaCores(pApplet);
 		palhetaCores.addColorChangeListener(brush);
 
@@ -47,7 +103,8 @@ public class Workspace implements ButtonListener {
 		sprayCan.addButtonListener(this);
 	}
 
-	public void draw() {
+	public void draw()
+	{
 		sprayCan.lerSensores();
 		brush.ajustarRaio();
 
@@ -62,32 +119,40 @@ public class Workspace implements ButtonListener {
 
 	long cursorTimestamp;
 
-	public void addCursor(Cursor cursor) {
+	public void addCursor(Cursor cursor)
+	{
 		cursorTimestamp = pApplet.millis();
 
-		if(palhetaCores.isVisible()) {
+		if(palhetaCores.isVisible())
+		{
 			return;
 		}
 
 		canvas.addCursor(cursor);
 	}
 
-	public void updateCursor(Cursor cursor) {
-		if(palhetaCores.isVisible()) {
+	public void updateCursor(Cursor cursor)
+	{
+		if(palhetaCores.isVisible())
+		{
 			return;
 		}
 
 		canvas.updateCursor(cursor);
 	}
 
-	public void removeCursor(Cursor cursor) {
+	public void removeCursor(Cursor cursor)
+	{
 		boolean click = false;
-		if(pApplet.millis() - cursorTimestamp <= DELAY_CLICK) {
+		if(pApplet.millis() - cursorTimestamp <= DELAY_CLICK)
+		{
 			click = true;
 		}
 
-		if(palhetaCores.isVisible()) {
-			if(click && palhetaCores.isOver(cursor)) {
+		if(palhetaCores.isVisible())
+		{
+			if(click && palhetaCores.isOver(cursor))
+			{
 				palhetaCores.onClick(cursor);
 			}
 		}
@@ -104,27 +169,27 @@ public class Workspace implements ButtonListener {
 		if(pApplet.key == ' ') {
 			canvas.reset();
 			pApplet.background(FUNDO);
-			canvas.hist_clear();
-			canvas.hist_add();
+			canvas.histClear();
+			canvas.histAdd();
 		}
 		else if(pApplet.key == 'b') {
 			canvas.reset();
 			pApplet.image(pApplet.loadImage("brickwall.jpg"), 0, 0);
-			canvas.hist_clear();
-			canvas.hist_add();
+			canvas.histClear();
+			canvas.histAdd();
 		}
 		//Salva
 		else if(pApplet.key == 's') {
 			pApplet.saveFrame("foo.jpg");
 			byte buf[] = pApplet.loadBytes("foo.jpg");
-			TwitpicService.send(buf);
+			twitpicService.send(buf);
 		}
 		else if(pApplet.key >= '0' && pApplet.key <= '9') {
 			palhetaCores.colorChanged(new ColorEvent(this, pApplet.key-48));
 			brush.colorChanged(new ColorEvent(this, pApplet.key-48));
 		}
 		else if(pApplet.key == 'u') {
-			canvas.hist_back();
+			canvas.histBack();
 		}
 	}
 	
@@ -143,20 +208,20 @@ public class Workspace implements ButtonListener {
 	}
 
 	private void desfazer() {
-		canvas.hist_back();
+		canvas.histBack();
 	}
 	
 	private void salvar() {
 		pApplet.saveFrame("imagemTemporaria.jpg");
 		byte buf[] = pApplet.loadBytes("imagemTemporaria.jpg");
-		TwitpicService.send(buf);
+		twitpicService.send(buf);
 	}
 		
 	private void limpar() {
 		canvas.reset();
 		pApplet.image(pApplet.loadImage("brickwall.jpg"), 0, 0);
-		canvas.hist_clear();
-		canvas.hist_add();
+		canvas.histClear();
+		canvas.histAdd();
 	}
 	
 	////////////////

@@ -17,21 +17,65 @@ import com.harrison.lee.twitpic4j.exception.TwitPicException;
  */
 public class TwitpicService
 {
-	private static final String user = "spamdora666";
-	private static final String pass = "caralhada";
-
+	/*
+	private String user;
+	private String pass;
+	*/
+	
+	private String text = "undefined text";
+	
 	private static TwitPic req;
 
-	static
+	public TwitpicService(String user, String pass, String text)
 	{
 		/*
 		 * connect
 		 * 
 		 */
+		this.text = text;
 		req = new TwitPic(user, pass);
+		
+		System.err.println("user = " + user);
+		System.err.println("pass = " + pass);
+		System.err.println("text = " + text);
+		
 	}
 
-	public static void send(byte[] data)
+	/*
+	 * 
+	 * 
+	 * 
+	 * 
+	 * getters and setters
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 */
+	public String getText()
+        {
+        	return text;
+        }
+
+	public void setText(String text)
+        {
+        	this.text = text;
+        }
+
+	/*
+	 * 
+	 * 
+	 * 
+	 * 
+	 * send
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 */
+	public void send(byte[] data)
 	{
 		TwitPicResponse res = null;
 
@@ -41,8 +85,9 @@ public class TwitpicService
 		 */
 		try
 		{
-			res = req.uploadAndPost(data, "EHLLO WARUDO!!!");
-		} 
+			res = req.uploadAndPost(data, text);
+		}
+		
 		catch (IOException e)
 		{
 			e.printStackTrace();
@@ -61,7 +106,7 @@ public class TwitpicService
 			res.dumpVars();
 	}
 
-	public static void send(File fp)
+	public void send(File fp)
 	{
 		TwitPicResponse res = null;
 
@@ -71,7 +116,7 @@ public class TwitpicService
 		 */
 		try
 		{
-			res = req.uploadAndPost(fp, "EHLLO WARUDO!!!");
+			res = req.uploadAndPost(fp, text);
 		}
 
 		catch (IOException e)
