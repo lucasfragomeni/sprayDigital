@@ -85,13 +85,13 @@ public class SprayCan {
 					int btn = Integer.parseInt(dataIn.split(":")[1]);
 					switch(btn) {
 					case 1:
-						fireButtonPressed(ButtonEvent.LIMPAR);
+						fireButtonPressed(ButtonEvent.DESFAZER);
 						break;
 					case 2:
-						fireButtonPressed(ButtonEvent.SALVAR);
+						fireButtonPressed(ButtonEvent.LIMPAR);
 						break;
 					case 3:
-						fireButtonPressed(ButtonEvent.DESFAZER);
+						fireButtonPressed(ButtonEvent.SALVAR);
 					}
 				} else {
 					try {
