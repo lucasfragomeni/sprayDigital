@@ -7,7 +7,7 @@ import processing.core.PApplet;
 import cc.bebop.spraydigital.event.ButtonEvent;
 import cc.bebop.spraydigital.event.ButtonListener;
 import cc.bebop.spraydigital.event.ColorEvent;
-import cc.bebop.spraydigital.network.TwitpicService;
+//import cc.bebop.spraydigital.network.TwitpicService;
 
 public class Workspace implements ButtonListener
 {
@@ -25,7 +25,7 @@ public class Workspace implements ButtonListener
 	 * twitpic
 	 * 
 	 */
-	private TwitpicService twitpicService;
+	//private TwitpicService twitpicService;
 	
 	private PApplet pApplet;
 
@@ -71,13 +71,13 @@ public class Workspace implements ButtonListener
 		}
 		*/
 		
-		System.err.println("SHIT");
-		
+		/*
 		twitpicService = new TwitpicService(
 				props.getProperty("twitpic.user"),
 				props.getProperty("twitpic.pass"),
 				props.getProperty("twitpic.text")
 				);
+		*/
 
 		this.pApplet = pApplet;
 		this.pApplet.size(this.pApplet.screenWidth, this.pApplet.screenHeight, PApplet.OPENGL);
@@ -176,16 +176,11 @@ public class Workspace implements ButtonListener
 			canvas.histAdd();
 		}
 		else if(pApplet.key == 'b') {
-			canvas.reset();
-			pApplet.image(pApplet.loadImage("brickwall.jpg"), 0, 0);
-			canvas.histClear();
-			canvas.histAdd();
+			limpar();
 		}
 		//Salva
 		else if(pApplet.key == 's') {
-			pApplet.saveFrame("foo.jpg");
-			byte buf[] = pApplet.loadBytes("foo.jpg");
-			twitpicService.send(buf);
+			salvar();
 		}
 		else if(pApplet.key >= '0' && pApplet.key <= '9') {
 			palhetaCores.colorChanged(new ColorEvent(this, pApplet.key-48));
@@ -215,9 +210,12 @@ public class Workspace implements ButtonListener
 	}
 	
 	private void salvar() {
-		pApplet.saveFrame("imagemTemporaria.jpg");
-		byte buf[] = pApplet.loadBytes("imagemTemporaria.jpg");
-		twitpicService.send(buf);
+		String path = props.getProperty("savePrefix") + System.currentTimeMillis() + ".jpg";
+		
+		pApplet.saveFrame(path);
+		//byte buf[] = pApplet.loadBytes(path);
+		
+		//twitpicService.send(buf);
 	}
 		
 	private void limpar() {
