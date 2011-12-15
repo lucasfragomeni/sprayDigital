@@ -22,7 +22,7 @@ void setup() {
    * size() is run twice!
    *
    */
-  size(screenWidth, screenHeight, P3D);
+  size(screenWidth, screenHeight, P2D);
   frameRate(30);
 
   tuio = new TuioProcessing(this);
