@@ -80,10 +80,10 @@ public class Workspace implements ButtonListener
 		*/
 
 		this.pApplet = pApplet;
-		this.pApplet.image(pApplet.loadImage("brickwall.jpg"), 0, 0);
-		this.pApplet.fill(0);
-		this.pApplet.smooth();
-		this.pApplet.stroke(0);
+		//this.pApplet.image(pApplet.loadImage("brickwall.jpg"), 0, 0);
+		//this.pApplet.fill(0);
+		//this.pApplet.smooth();
+		//this.pApplet.stroke(0);
 
 		//Ponteiras
 		brush = new Brush(pApplet);

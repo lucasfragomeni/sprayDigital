@@ -16,14 +16,20 @@ Smoother smoother;
 void setup() {
   /*
    * NOTE: Use P2D rather than OPENGL. Processing docs says its usually faster.
+   * NOTE2: P2D is not working for some reason. Using P3D for now.
    *
    * WARNING: Keep teh call to size() above _EVERYTHING_! Processing docs says
    * it must be teh first line on setup()! In fact, everything called before
    * size() is run twice!
    *
    */
-  size(screenWidth, screenHeight, P2D);
+  size(screenWidth, screenHeight, P3D);
   frameRate(30);
+  
+  //fill(0);
+  //stroke(0);
+  //smooth();
+  //strokeWeight(2);
 
   tuio = new TuioProcessing(this);
   workspace = new Workspace(this);
