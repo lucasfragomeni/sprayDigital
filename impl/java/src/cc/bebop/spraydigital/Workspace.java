@@ -55,32 +55,9 @@ public class Workspace implements ButtonListener
 			System.out.println("Ocorreu um erro ao carregar o arquivo de propriedades: " + e.getMessage());
 			e.printStackTrace();
 		}
-		
-		/*
-		if(true)
-		{
-			try
-			{
-				throw new RuntimeException();
-			}
-			
-			catch(RuntimeException e)
-			{
-				e.printStackTrace();
-			}
-		}
-		*/
-		
-		/*
-		twitpicService = new TwitpicService(
-				props.getProperty("twitpic.user"),
-				props.getProperty("twitpic.pass"),
-				props.getProperty("twitpic.text")
-				);
-		*/
 
 		this.pApplet = pApplet;
-		//this.pApplet.image(pApplet.loadImage("brickwall.jpg"), 0, 0);
+		this.pApplet.image(pApplet.loadImage("brickwall.jpg"), 0, 0);
 		//this.pApplet.fill(0);
 		//this.pApplet.smooth();
 		//this.pApplet.stroke(0);
