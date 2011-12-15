@@ -80,9 +80,6 @@ public class Workspace implements ButtonListener
 		*/
 
 		this.pApplet = pApplet;
-		this.pApplet.size(this.pApplet.screenWidth, this.pApplet.screenHeight, PApplet.OPENGL);
-		this.pApplet.hint(PApplet.ENABLE_OPENGL_4X_SMOOTH);
-		this.pApplet.frameRate(120F);
 		this.pApplet.image(pApplet.loadImage("brickwall.jpg"), 0, 0);
 		this.pApplet.fill(0);
 		this.pApplet.smooth();

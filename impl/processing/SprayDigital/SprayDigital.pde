@@ -14,6 +14,17 @@ Workspace workspace;
 Smoother smoother;
 
 void setup() {
+  /*
+   * NOTE: Use P2D rather than OPENGL. Processing docs says its usually faster.
+   *
+   * WARNING: Keep teh call to size() above _EVERYTHING_! Processing docs says
+   * it must be teh first line on setup()! In fact, everything called before
+   * size() is run twice!
+   *
+   */
+  size(screenWidth, screenHeight, P3D);
+  frameRate(30);
+
   tuio = new TuioProcessing(this);
   workspace = new Workspace(this);
   smoother = new Smoother();
