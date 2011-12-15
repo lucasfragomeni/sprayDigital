@@ -122,6 +122,8 @@ public class Brush implements ColorListener, DistanceListener {
 		}
 
 		if(raio >= RAIO_MAX) raio = RAIO_MAX - 1;
+		
+		raio = 20;
 
 		//Calcula a densidade proporcional ao tamanho do raio
 		// -> Quanto menor o raio, menor a densidade.

@@ -1,13 +1,16 @@
 package cc.bebop.spraydigital;
 
 import processing.core.PApplet;
-import processing.core.PImage;
+import processing.core.PFont;
+//import processing.core.PImage;
 
 public class Notice extends UIComponent {
 	
 	private static final long DELAY_NOTICE = 3000;
 
-	private PImage imgNotice;
+	//private PImage imgNotice;
+	
+	PFont font;
 
 	private boolean visible;
 
@@ -15,7 +18,9 @@ public class Notice extends UIComponent {
 
 	public Notice(PApplet pApplet) {
 		super(pApplet);
-		this.imgNotice = pApplet.loadImage("notice.png");
+		//this.imgNotice = pApplet.loadImage("notice.png");
+		
+		font = pApplet.loadFont("CourierNew36.vlw"); 
 	}
 
 	public void draw() {
@@ -30,18 +35,43 @@ public class Notice extends UIComponent {
 	////////////////////
 
 	public void show() {
-		if(!visible) {
-			revertState();
+		
+		//System.err.println("SHOW");
+		
+		if(!visible)
+			saveState();
 			
-			pApplet.imageMode(PApplet.CENTER);
-			pApplet.image(imgNotice, pApplet.screenWidth/2, pApplet.screenHeight/2);
+		/*
+		pApplet.imageMode(PApplet.CENTER);
+		pApplet.image(imgNotice, pApplet.screenWidth/2, pApplet.screenHeight/2);
+		*/
+		
+		pApplet.rectMode(PApplet.CENTER);
+		pApplet.fill(255);
+		
+		pApplet.rect(
+				pApplet.screenWidth/2,
+				pApplet.screenHeight/2,
+				pApplet.screenWidth/2,
+				pApplet.screenHeight/2
+				);
+			
+		pApplet.textFont(font); 
+		pApplet.fill(0);	
+		pApplet.text(
+				"notice!",
+				pApplet.screenWidth/2,
+				pApplet.screenHeight/2,
+				pApplet.screenWidth/2,
+				pApplet.screenHeight/2
+				);
 
-			timestampNotice = pApplet.millis();
-			visible = true;
-		}
+		timestampNotice = pApplet.millis();
+		visible = true;
 	}
 
 	public void hide() {
+		//System.err.println("HIDE");
 		revertState();
 		visible = false;
 	}

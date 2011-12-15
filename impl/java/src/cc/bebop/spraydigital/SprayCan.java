@@ -55,7 +55,8 @@ public class SprayCan {
 		while(arduino == null) {
 			try {
 				PApplet.println(Serial.list());
-				arduino = new Serial(pApplet, Serial.list()[0], 9600);
+				//arduino = new Serial(pApplet, Serial.list()[0], 9600);
+				arduino = new Serial(pApplet, Serial.list()[2], 9600);
 
 				//Inicializa o spray
 				sendInit();
@@ -126,9 +127,13 @@ public class SprayCan {
 		buttonListeners.remove(listener);
 	}
 
-	private void fireButtonPressed(String action) {
+	private void fireButtonPressed(int action) {
+		ButtonEvent event = new ButtonEvent(this, action);
 		for(ButtonListener buttonListener : buttonListeners) {
-			buttonListener.buttonPressed(new ButtonEvent(this, action));
+			if(event.isConsumed()) {
+				break;
+			}
+			buttonListener.buttonPressed(event);
 		}
 	}
 	

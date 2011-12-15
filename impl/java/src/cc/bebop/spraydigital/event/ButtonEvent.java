@@ -2,19 +2,19 @@ package cc.bebop.spraydigital.event;
 
 @SuppressWarnings("serial")
 public class ButtonEvent extends Event {
+	
+	public static final int LIMPAR = 1;
+	public static final int DESFAZER = 1 << 1;
+	public static final int SALVAR = 1 << 2;
 
-	public static final String LIMPAR = "LIMPAR";
-	public static final String DESFAZER = "DESFAZER";
-	public static final String SALVAR = "SALVAR";
+	private int action;
 	
-	private String action;
-	
-	public ButtonEvent(Object source, String action) {
+	public ButtonEvent(Object source, int action) {
 		super(source);
 		this.action = action;
 	}
 
-	public String getAction() {
+	public int getAction() {
 		return action;
 	}
 	

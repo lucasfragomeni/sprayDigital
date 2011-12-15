@@ -38,6 +38,16 @@ abstract class UIComponent {
 	
 	protected void saveState() {
 		imgState = pApplet.get();
+		
+		/*
+		System.err.printf(
+				"state: (%d, %d); screen: (%d, %d);",
+				imgState.width,
+				imgState.height,
+				pApplet.screenWidth,
+				pApplet.screenHeight
+				);
+				*/
 	}
 	
 	protected void revertState() {
