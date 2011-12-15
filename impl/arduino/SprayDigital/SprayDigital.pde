@@ -30,6 +30,8 @@ int leituraAnteriorCor = -100;
 byte incomingByte;
 int ackBlinks = 0;
 
+long timestamp;
+
 /*
  *
  */
@@ -75,11 +77,14 @@ void loop() {
       corAnterior = cor;
     }
     else {
-      //Distancia
-      int distancia = lerDistancia();
-      if((distancia != distanciaAnterior && abs(distancia - distanciaAnterior) > 2)) {
-        Serial.println(distancia);
-        distanciaAnterior = distancia;
+      if(millis() - timestamp >= 50) {
+        //Distancia
+        int distancia = lerDistancia();
+        if((distancia != distanciaAnterior && abs(distancia - distanciaAnterior) > 2)) {
+          Serial.println(distancia);
+          distanciaAnterior = distancia;
+        }
+        timestamp = millis();
       }
     }
   }
