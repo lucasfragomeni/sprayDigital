@@ -1,28 +1,40 @@
 package cc.bebop.spraydigital;
 
 import processing.core.PApplet;
-import processing.core.PFont;
-//import processing.core.PImage;
+import processing.core.PImage;
 
 public class Notice extends UIComponent {
 	
 	private static final long DELAY_NOTICE = 3000;
 
-	//private PImage imgNotice;
+	private PImage imageNotice;
+	private PImage imageLogo;
 	
-	PFont font;
-
 	private boolean visible;
 
 	private long timestampNotice;
-
-	public Notice(PApplet pApplet) {
+	
+	/////////////////
+	// Constructor //
+	/////////////////
+	public Notice(PApplet pApplet, PImage imageNotice) {
 		super(pApplet);
-		//this.imgNotice = pApplet.loadImage("notice.png");
+		setImageNotice(imageNotice);
 		
-		font = pApplet.loadFont("CourierNew36.vlw"); 
+		imageLogo = pApplet.loadImage("bebop.png");
 	}
+	
+	/////////////////////////
+	// Getters and setters //
+	/////////////////////////
+	public PImage getImageNotice() {
+        	return imageNotice;
+        }
 
+	public void setImageNotice(PImage imageNotice) {
+        	this.imageNotice = imageNotice;
+        }
+	
 	public void draw() {
 		//Se já tiver passado o delay para esconder, o faz e finaliza a seleção de cor
 		if(visible && pApplet.millis() - timestampNotice > DELAY_NOTICE) {
@@ -33,35 +45,20 @@ public class Notice extends UIComponent {
 	////////////////////
 	// Seleção da cor //
 	////////////////////
-
 	public void show() {
 		
 		//System.err.println("SHOW");
 		
 		if(!visible)
 			saveState();
+		
+		pApplet.imageMode(PApplet.CORNER);
+		pApplet.image(imageLogo, pApplet.screenWidth - imageLogo.width - 15, 15);
 			
-		/*
 		pApplet.imageMode(PApplet.CENTER);
-		pApplet.image(imgNotice, pApplet.screenWidth/2, pApplet.screenHeight/2);
-		*/
-		
-		pApplet.rectMode(PApplet.CENTER);
-		pApplet.fill(255);
-		
-		pApplet.rect(
-				pApplet.screenWidth/2,
-				pApplet.screenHeight/2,
-				pApplet.screenWidth/2,
-				pApplet.screenHeight/2
-				);
-			
-		pApplet.textFont(font); 
-		pApplet.fill(0);	
-		pApplet.text(
-				"notice!",
-				pApplet.screenWidth/2,
-				pApplet.screenHeight/2,
+
+		pApplet.image(
+				imageNotice, 
 				pApplet.screenWidth/2,
 				pApplet.screenHeight/2
 				);
@@ -89,7 +86,6 @@ public class Notice extends UIComponent {
 	}
 
 	public void onClick(Cursor cursor) {
-		System.out.println(">>>>>> click no Notice <<<<<<");
 	}
 
 }

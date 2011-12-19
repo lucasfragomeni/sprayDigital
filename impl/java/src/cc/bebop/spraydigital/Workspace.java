@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Properties;
 
 import processing.core.PApplet;
+import processing.core.PImage;
 import cc.bebop.spraydigital.event.ButtonEvent;
 import cc.bebop.spraydigital.event.ButtonListener;
 import cc.bebop.spraydigital.event.ColorEvent;
@@ -45,6 +46,16 @@ public class Workspace implements ButtonListener, ColorListener
 	private static final long buttonDelay = 3000;
 	
 	int buttonLastAction;
+	
+	/*
+	 * resources
+	 * 
+	 */
+	PImage
+		imageNoticeSave,
+		imageNoticeClean,
+		imageNoticeUndo
+		;
 
 	public Workspace(PApplet pApplet)
 	{
@@ -62,6 +73,10 @@ public class Workspace implements ButtonListener, ColorListener
 			System.out.println("Ocorreu um erro ao carregar o arquivo de propriedades: " + e.getMessage());
 			e.printStackTrace();
 		}
+		
+		imageNoticeSave = pApplet.loadImage("imageNoticeSave.png");
+		imageNoticeClean = pApplet.loadImage("imageNoticeClean.png");
+		imageNoticeUndo = pApplet.loadImage("imageNoticeUndo.png");
 		
 		/*
 		twitpicService = new TwitpicService(
@@ -95,7 +110,7 @@ public class Workspace implements ButtonListener, ColorListener
 		
 		//System.err.println("4 TIEM: " + System.currentTimeMillis());
 		
-		notice = new Notice(pApplet);
+		notice = new Notice(pApplet, imageNoticeSave);
 		
 		//System.err.println("5 TIEM: " + System.currentTimeMillis());
 
@@ -283,8 +298,25 @@ public class Workspace implements ButtonListener, ColorListener
 			if(palhetaCores.isVisible())
 				palhetaCores.hide();
 			
-			notice.show();
+			switch(event.getAction())
+			{
+			case ButtonEvent.SALVAR:
+				notice.setImageNotice(imageNoticeSave);
+				break;
+				
+			case ButtonEvent.LIMPAR:
+				notice.setImageNotice(imageNoticeClean);
+				break;
+				
+			case ButtonEvent.DESFAZER:
+				notice.setImageNotice(imageNoticeUndo);
+				break;
+				
+			default:
+				System.err.println("unknown button");
+			}
 			
+			notice.show();
 			return;
 		}
 		
