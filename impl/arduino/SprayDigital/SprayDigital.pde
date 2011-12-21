@@ -1,5 +1,7 @@
 #include <TimerOne.h>
 
+#define M_E 2.7182818284590452353602874713526624977572470936999595749669
+
 const byte INIT = 1;
 const byte ACK = 2;
 
@@ -68,7 +70,7 @@ void loop() {
     }
   }
   
-  if(inicializado) {
+  //if(inicializado) {
     //Cor
     int cor = lerCor();
     if(cor != corAnterior) {
@@ -80,14 +82,14 @@ void loop() {
       if(millis() - timestamp >= 50) {
         //Distancia
         int distancia = lerDistancia();
-        if((distancia != distanciaAnterior && abs(distancia - distanciaAnterior) > 2)) {
-          Serial.println(distancia);
+        if((distancia != distanciaAnterior && abs(distancia - distanciaAnterior) > 1)) {
+          Serial.println((int) distConv(distancia));
           distanciaAnterior = distancia;
         }
         timestamp = millis();
       }
     }
-  }
+  //}
 
   checkTimeout();
   
@@ -100,6 +102,31 @@ void checkTimeout() {
       inicializado = false;
     }
   }
+}
+
+/*
+ * distConv()
+ *
+ * convert voltage reading to millimeters.
+ *
+ * exponential fit from data set:
+ *
+ * --------------------------------------------
+ * reading   | distance | reading  | distance 
+ * --------------------------------------------
+ * 6         | 3        | 80       | 25
+ * 26        | 5        | 84       | 30
+ * 57        | 10       | 85       | 35
+ * 70        | 15       | 87       | 40
+ * 77        | 20       |          |
+ * --------------------------------------------
+ *
+ * best fit: 3.96929 e^(0.0523051 x)
+ *
+ */
+
+double distConv(double x) {
+  return 3.96929 * pow(M_E, 0.0523051 * x);
 }
 
 void controlarLedsSinalizadores() {

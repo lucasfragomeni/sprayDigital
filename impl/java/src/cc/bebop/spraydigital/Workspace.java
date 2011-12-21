@@ -116,7 +116,7 @@ public class Workspace implements ButtonListener, ColorListener
 
 		//Interface c/ Hardware
 		sprayCan = new SprayCan(pApplet);
-		sprayCan.addDistanceChangeListener(brush);
+		sprayCan.addDistanceChangeListener(canvas);
 		sprayCan.addColorChangeListener(this);
 		sprayCan.addColorChangeListener(palhetaCores);
 		sprayCan.addButtonListener(this);
@@ -130,7 +130,6 @@ public class Workspace implements ButtonListener, ColorListener
 	public void draw()
 	{
 		sprayCan.lerSensores();
-		brush.ajustarRaio();
 
 		canvas.draw();
 		palhetaCores.draw();

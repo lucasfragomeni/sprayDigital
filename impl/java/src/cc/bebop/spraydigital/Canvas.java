@@ -7,13 +7,12 @@ import krister.Ess.Ess;
 import processing.core.PApplet;
 import processing.core.PImage;
 import cc.bebop.processing.util.ObjectUtil;
-import cc.bebop.spraydigital.event.RadiusEvent;
-import cc.bebop.spraydigital.event.RadiusListener;
-import cc.bebop.util.MediaMovel;
+import cc.bebop.spraydigital.event.DistanceEvent;
+import cc.bebop.spraydigital.event.DistanceListener;
 import ddf.minim.AudioSnippet;
 import ddf.minim.Minim;
 
-public class Canvas extends UIComponent implements RadiusListener {
+public class Canvas extends UIComponent implements DistanceListener {
 
 	//Audio
 	private Minim minim;
@@ -22,16 +21,20 @@ public class Canvas extends UIComponent implements RadiusListener {
 	private AudioChannel airspray;
 
 	private Cursor cursorAtual;
-	private float cursorX;
-	private float cursorY;
+	
+	private double
+			x1, x2,
+			y1, y2,
+			z1, z2,
+			r1, r2
+			;
+	
+	private long
+			t1, t2
+			;
 
-	private int raio = Brush.RAIO_MIN;
-
-	private float x;
-	private float y;
-	private float px;
-	private float py;
-
+	private double K = Math.tan(Math.PI / 4) / 6;
+	
 	/*
 	 * historico de modificações da imagem
 	 * 
@@ -48,9 +51,7 @@ public class Canvas extends UIComponent implements RadiusListener {
 	public int histAdd()
 	{
 		if(hist.size() >= HIST_MAX)
-		{
 			hist.removeLast();
-		}
 
 		hist.push(pApplet.get());
 		return hist.size();
@@ -66,104 +67,70 @@ public class Canvas extends UIComponent implements RadiusListener {
 		return hist.size();
 	}
 
-
-	/*
-	 * 
-	 * 
-	 */
-
-	private MediaMovel mediaVelocidade = new MediaMovel(10);
-
 	private Brush brush;
 
-	public Canvas(PApplet pApplet) {
+	public Canvas(PApplet pApplet)
+	{
 		super(pApplet);
 		this.inicializarEfeitosSonoros();
+		
+		z2 = 100;
+		r2 = z2 * K;
+		
+		z1 = z2;
+		z1 = z1 + 0;
+		r1 = r2;
 
 		hist = new LinkedList<PImage>();
 		histClear();
 		histAdd();
 	}
 
-	public void setBrush(Brush brush) {
+	public void setBrush(Brush brush)
+	{
 		this.brush = brush;
-		this.brush.addRadiusChangeListener(this);
 	}
 
 	boolean cursorAtualizado = true;
+	
+	private static final int cursorTimeout = 50;
 
-	public void draw() {
-		if(!isStateSaved()) {
-			saveState();
-		}
-
-		//Só processa a luz se não estiver mudando de cor
-		if(cursorAtual != null) {
-			if(cursorAtualizado) {
+	public void draw()
+	{
+		if(cursorAtual == null)
+		{
+			if(cursorAtualizado)
+			{
+				airspray.stop();
+				
 				cursorAtualizado = false;
-				x = cursorX;
-				y = cursorY;
-				if(px == 0 && py == 0) {
-					px = x;
-					py = y;
-				}
-
-				if(pApplet.frameCount > 2) {
-					float diffX = x - px;
-					float diffY = y - py;
-
-					float fator = (raio <= 15) ? 0.8f : (raio <= 25) ? 1.1f : (raio <= 40) ? 1.2f : 1.4f;
-					float qtdPontosX = PApplet.abs(diffX / (raio * fator));
-					float qtdPontosY = PApplet.abs(diffY / (raio * fator));
-					float qtdPontosTotal = PApplet.ceil(PApplet.max(qtdPontosX, qtdPontosY));
-					if(qtdPontosTotal < 1) qtdPontosTotal = 1F;
-					float incrementoX = diffX / qtdPontosTotal;
-					float incrementoY = diffY / qtdPontosTotal;
-
-					float velocidade = mediaVelocidade.media(PApplet.dist(x, y, x + incrementoX, y + incrementoY));
-
-					//Preenche todos os pontos intermediários não capturados
-					if(qtdPontosX > 1 || qtdPontosY > 1) {
-						//TODO resolver "bug do canto superior esquerdo"
-						if(x == 0 || y == 0) return;
-
-						float nx = px;
-						float ny = py;
-
-						//Itere pelas bolas que faltam
-						for(int i = 0; i < qtdPontosTotal; i++) {
-							nx += incrementoX;
-							ny += incrementoY;
-
-							//Para cada bola, começando da primeira nossa
-							//Nota: em caso de preenchimento de pontos não capturados, não sobrepõe as bolas.
-							spray(nx, ny, velocidade);
-						}
-					}
-					else {
-						spray(x, y, velocidade);
-					}
-
-					//Só atualiza PX e PY quando tiver mudado
-					px = x;
-					py = y;
-				}
 			}
+			
+			return;
 		}
-		else {
-			airspray.stop();
-		}
+		
+		if((!cursorAtualizado) && ((pApplet.millis() - t1) < cursorTimeout))
+			return;
+		
+		cursorAtualizado = false;
+		
+		t2 = pApplet.millis();
+				
+		int Q = (int) (45000 * (t2 - t1)) / 1000;
+		
+		//System.err.printf("sprayLine(\n%f, %f, %f, \n%f, %f, %f, \n%f)\n", x1, y1, r1, x2, y2, r2, Q);
+				
+		brush.sprayLine(x1, y1, r1, x2, y2, r2, Q);
+
+		x1 = x2;
+		y1 = y2;
+		z1 = z2;
+		r1 = r2;
+		t1 = t2;
 	}
 
-	void spray(float x, float y, float velocidade) {
-		spray(x, y, velocidade, true);
-	}
-
-	void spray(float x, float y, float velocidade, boolean sobrepor) {
-		brush.spray(x, y, velocidade, sobrepor);
-	}
-
-	void reset() {
+	void reset()
+	{
 		emptycan.play();
 		emptycan.rewind();
 		pApplet.delay(2000);
@@ -171,64 +138,88 @@ public class Canvas extends UIComponent implements RadiusListener {
 		canshake.rewind();
 	}
 
-	public boolean isOver(Cursor cursor) {
-		return ObjectUtil.isOver(this.x, this.y, cursor.x, cursor.y, this.width, this.height);
-	}
-
-	//////////////////
-	// Radius Event //
-	//////////////////
-
-	public void radiusChanged(RadiusEvent event) {
-		this.raio = event.getRadius();
+	public boolean isOver(Cursor cursor)
+	{
+		return ObjectUtil.isOver((float) this.x2, (float) this.y2, cursor.x, cursor.y, this.width, this.height);
 	}
 
 	//////////////////
 	// Cursor Event //
 	//////////////////
 
-	public void addCursor(Cursor cursor) {
-		if(cursorAtual == null) {
-			if(emptycan.isPlaying() || canshake.isPlaying()) {
+	public void addCursor(Cursor cursor)
+	{
+		if(cursorAtual != null)
+			return;
+
+		if(emptycan.isPlaying() || canshake.isPlaying())
 				return;
-			}
+			
+		cursorAtual = cursor;
+				
+		x2 = cursorAtual.getX();
+		y2 = cursorAtual.getY();
+		t2 = pApplet.millis();
+		
+		x1 = x2;
+		y1 = y2;
+		t1 = t2;
 
-			if(cursorAtual == null) {
-	//			revertState();
-
-				cursorAtual = cursor;
-				cursorAtualizado = true;
-				cursorX = cursorAtual.getX();
-				cursorY = cursorAtual.getY();
-				px = 0;
-				py = 0;
-
-				loop(airspray);
-			}
-		}
+		loop(airspray);
+		
+		cursorAtualizado = true;
+		
+		//System.err.println("add:\t" + x2 + ",\t" + y2);
 	}
 
-	public void updateCursor(Cursor cursor) {
-		if(cursorAtual != null && cursorAtual.equals(cursor)) {
-			cursorAtualizado = true;
-			cursorX = cursorAtual.getX();
-			cursorY = cursorAtual.getY();
-		}
+	public void updateCursor(Cursor cursor)
+	{
+		if(cursorAtual == null)
+			return;
+		
+		if(!cursorAtual.equals(cursor))
+			return;
+		
+		x2 = cursorAtual.getX();
+		y2 = cursorAtual.getY();
+		t2 = pApplet.millis();
+		
+		cursorAtualizado = true;
+		
+		//System.err.println("up:\t" + x2 + ",\t" + y2);
 	}
 
-	public void removeCursor(Cursor cursor) {
-		if(cursorAtual != null && cursorAtual.equals(cursor)) {
-			saveState();
+	public void removeCursor(Cursor cursor)
+	{
+		if(cursorAtual == null)
+			return;
+		
+		if(!cursorAtual.equals(cursor))
+			return;
+		
+		airspray.stop();
+		
+		x2 = cursorAtual.getX();
+		y2 = cursorAtual.getY();
+		t2 = pApplet.millis();
+		
+		cursorAtual = null;
+		
+		histAdd();
+		
+		cursorAtualizado = true;
+		
+		//System.err.println("remove:\t" + x2 + ",\t" + y2);
+	}
+	
+	//////////////////
+	// Spray Events //
+	//////////////////
 
-			cursorAtual = null;
-			cursorAtualizado = true;
-			px = 0F;
-			py = 0F;
-
-			airspray.stop();
-
-			histAdd();
-		}
+	public void distanceChanged(DistanceEvent event)
+	{
+		z2 = event.getDistance();
+		r2 = z2 * K;
 	}
 
 	/////////////////////

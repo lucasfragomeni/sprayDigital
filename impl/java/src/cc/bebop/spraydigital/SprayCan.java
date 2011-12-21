@@ -20,7 +20,7 @@ public class SprayCan {
 	//@SuppressWarnings("unused")
 	private PApplet pApplet;
 
-	private static final int DISTANCIA_MIN = 35;
+	//private static final int DISTANCIA_MIN = 35;
 	private static final int LINE_FEED = 10;    // Linefeed in ASCII
 
 	private static final byte INIT = 1;
@@ -28,7 +28,7 @@ public class SprayCan {
 
 	private int lastSeen = 0;
 	private int timeOut = 1000;
-
+	
 	private Serial arduino;
 
 	private List<ColorListener> colorListeners = new ArrayList<ColorListener>();
@@ -79,7 +79,7 @@ public class SprayCan {
 
 				//Trata o dado recebido
 				dataIn = dataIn.trim();
-				System.out.println("dataIn: " + dataIn);
+				//System.out.println("dataIn: " + dataIn);
 				if(dataIn.startsWith("c:")) {
 					fireColorChanged(Integer.parseInt(dataIn.split(":")[1]));
 				} else if(dataIn.startsWith("b:")) {
@@ -166,14 +166,16 @@ public class SprayCan {
 	public void removeDistanceChangeListener(DistanceListener listener) {
 		distanceListeners.remove(listener);
 	}
-
+	
 	private void fireDistanciaChanged(int distancia) {
-		//A distância enviada pela Arduino varia aprox. entre 8 e 80,
-		//mas nós só queremos a partir de DISTANCIA_MIN
-		distancia = Math.max(distancia, DISTANCIA_MIN);
-
-		//Subtrai DISTANCIA_MIN-1 para que o valor começe no 1
-		distancia -= (DISTANCIA_MIN-1);
+		
+		if(distancia < 30)
+			distancia = 30;
+		
+		if(distancia > 400)
+			distancia = 400;
+		
+		//distancia = distConv(distancia);
 
 		for(DistanceListener distanceChangeListener : distanceListeners) {
 			distanceChangeListener.distanceChanged(new DistanceEvent(this, distancia));
