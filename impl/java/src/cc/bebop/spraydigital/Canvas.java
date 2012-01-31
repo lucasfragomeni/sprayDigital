@@ -119,7 +119,7 @@ public class Canvas extends UIComponent implements DistanceListener {
 		int Q = (int) (45000 * (t2 - t1)) / 1000;
 		
 		//System.err.printf("sprayLine(\n%f, %f, %f, \n%f, %f, %f, \n%f)\n", x1, y1, r1, x2, y2, r2, Q);
-				
+		
 		brush.sprayLine(x1, y1, r1, x2, y2, r2, Q);
 
 		x1 = x2;
@@ -149,23 +149,29 @@ public class Canvas extends UIComponent implements DistanceListener {
 
 	public void addCursor(Cursor cursor)
 	{
+		// FIXME: sanity check!
+		//assert (cursor != null);
+		
 		if(cursorAtual != null)
 			return;
 
 		if(emptycan.isPlaying() || canshake.isPlaying())
 				return;
+		
+		//System.err.printf("add cursor: (%f, %f)\n", cursor.getX(), cursor.getY());
 			
 		cursorAtual = cursor;
 				
 		x2 = cursorAtual.getX();
 		y2 = cursorAtual.getY();
 		t2 = pApplet.millis();
-		
+
 		x1 = x2;
 		y1 = y2;
 		t1 = t2;
 
 		loop(airspray);
+		//airspray.loop();
 		
 		cursorAtualizado = true;
 		
@@ -174,11 +180,16 @@ public class Canvas extends UIComponent implements DistanceListener {
 
 	public void updateCursor(Cursor cursor)
 	{
+		// FIXME: this is happening. Check.
+		//assert (cursor != null);
+		
 		if(cursorAtual == null)
 			return;
 		
 		if(!cursorAtual.equals(cursor))
 			return;
+		
+		//System.err.printf("update cursor: (%f, %f)\n", cursor.getX(), cursor.getY());
 		
 		x2 = cursorAtual.getX();
 		y2 = cursorAtual.getY();
@@ -196,6 +207,8 @@ public class Canvas extends UIComponent implements DistanceListener {
 		
 		if(!cursorAtual.equals(cursor))
 			return;
+		
+		//System.err.printf("remove cursor: \n");
 		
 		airspray.stop();
 		

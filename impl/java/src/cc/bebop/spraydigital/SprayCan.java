@@ -29,7 +29,7 @@ public class SprayCan {
 	private int lastSeen = 0;
 	private int timeOut = 1000;
 	
-	private Serial arduino;
+	private Serial cereal;
 
 	private List<ColorListener> colorListeners = new ArrayList<ColorListener>();
 	private List<ButtonListener> buttonListeners = new ArrayList<ButtonListener>();
@@ -45,37 +45,40 @@ public class SprayCan {
 
 	public void sendInit() {
 //		System.out.println("Sending init...");
-		arduino.write(INIT);
+		cereal.write(INIT);
 	}
+	
+	public SprayCan(PApplet papp, String port) {
+		this.pApplet = papp;
 
-	public SprayCan(PApplet pApplet) {
-		this.pApplet = pApplet;
-
-		//TODO implementar "timeout"
-		while(arduino == null) {
+		// TODO implementar "timeout"
+		while (cereal == null) {
 			try {
 				PApplet.println(Serial.list());
-				//arduino = new Serial(pApplet, Serial.list()[0], 9600);
-				arduino = new Serial(pApplet, Serial.list()[2], 9600);
+				cereal = new Serial(papp, port, 9600);
 
-				//Inicializa o spray
 				sendInit();
 				seen();
-				pApplet.delay(200);
-			} 
-			catch(Exception e) {
+			}
+
+			catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
 	}
 
+	public SprayCan(PApplet papp) {
+		this(papp, Serial.list()[0]);
+		System.out.println(Serial.list());
+	}
+	
 	public void lerSensores() {
 		//Lê a distância da Arduino
-		if(arduino.available() > 0) {
-			String dataIn = arduino.readStringUntil(LINE_FEED);
+		if(cereal.available() > 0) {
+			String dataIn = cereal.readStringUntil(LINE_FEED);
 			if(dataIn != null && dataIn.trim().length() > 0) { 
 				//Dá o ACK para a Arduino
-				arduino.write(ACK);
+				cereal.write(ACK);
 
 				//Trata o dado recebido
 				dataIn = dataIn.trim();
@@ -112,7 +115,7 @@ public class SprayCan {
 	}
 
 	public void stop() {
-		arduino.stop();
+		cereal.stop();
 	}
 
 	////////////////////

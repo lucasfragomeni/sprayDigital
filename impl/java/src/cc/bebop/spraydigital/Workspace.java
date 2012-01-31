@@ -115,7 +115,7 @@ public class Workspace implements ButtonListener, ColorListener
 		//System.err.println("5 TIEM: " + System.currentTimeMillis());
 
 		//Interface c/ Hardware
-		sprayCan = new SprayCan(pApplet);
+		sprayCan = new SprayCan(pApplet, props.getProperty("SprayCan.port"));
 		sprayCan.addDistanceChangeListener(canvas);
 		sprayCan.addColorChangeListener(this);
 		sprayCan.addColorChangeListener(palhetaCores);
