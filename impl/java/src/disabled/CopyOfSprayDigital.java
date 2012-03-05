@@ -1,8 +1,11 @@
-import cc.bebop.spraydigital.Cursor;
-import cc.bebop.spraydigital.Workspace;
+package cc.bebop.spraydigital;
+
+import processing.core.PApplet;
+import TUIO.TuioCursor;
+import TUIO.TuioObject;
+import TUIO.TuioProcessing;
+import TUIO.TuioTime;
 import cc.bebop.util.Smoother;
-import processing.core.*;
-import TUIO.*;
 
 //import cc.bebop.processing.util.*;
 
@@ -10,7 +13,7 @@ import TUIO.*;
  * @author IGOrrrr
  * 
  */
-public class SprayDigital extends PApplet {
+public class CopyOfSprayDigital extends PApplet {
 	private static final long serialVersionUID = 1L;
 	
 	TuioProcessing tuio;

@@ -117,6 +117,7 @@ public class Canvas extends UIComponent implements DistanceListener {
 		t2 = pApplet.millis();
 				
 		int Q = (int) (45000 * (t2 - t1)) / 1000;
+		//int Q = (int) (15000 * (t2 - t1)) / 1000;
 		
 		//System.err.printf("sprayLine(\n%f, %f, %f, \n%f, %f, %f, \n%f)\n", x1, y1, r1, x2, y2, r2, Q);
 		

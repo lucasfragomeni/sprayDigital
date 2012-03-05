@@ -1,3 +1,5 @@
 *.swp
 
 impl/processing/SprayDigital/save/
+impl/java/bin
+impl/java/data/save
