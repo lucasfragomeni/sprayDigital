@@ -43,7 +43,7 @@ public class PalhetaCores extends UIComponent implements ColorListener {
 
 	public void draw() {
 		//Se já tiver passado o delay para esconder, o faz e finaliza a seleção de cor
-		if(visible && pApplet.millis() - timestampSelecaoCor > DELAY_SELECAO_COR) {
+		if(visible && papp.millis() - timestampSelecaoCor > DELAY_SELECAO_COR) {
 			hide();
 		}
 	}
@@ -56,24 +56,24 @@ public class PalhetaCores extends UIComponent implements ColorListener {
 		if(!visible) {
 			revertState();
 
-			pApplet.imageMode(PApplet.CORNER);
-			pApplet.image(imgBebop, pApplet.screenWidth - imgBebop.width - 15, 15);
+			papp.imageMode(PApplet.CORNER);
+			papp.image(imgBebop, papp.screenWidth - imgBebop.width - 15, 15);
 
-			pApplet.imageMode(PApplet.CENTER);
-			pApplet.image(imgPalhetaCores, pApplet.screenWidth/2, pApplet.screenHeight/2);
-//			pApplet.image(imgMenu, pApplet.screenWidth/2, pApplet.screenHeight);
+			papp.imageMode(PApplet.CENTER);
+			papp.image(imgPalhetaCores, papp.screenWidth/2, papp.screenHeight/2);
+//			papp.image(imgMenu, papp.screenWidth/2, papp.screenHeight);
 
-			int posX = (pApplet.screenWidth/2) + ((indiceCor - 7) * 80);
-			int posY = pApplet.screenHeight/2 - 22;
-			pApplet.image(imgSeletorCor, posX, posY);
+			int posX = (papp.screenWidth/2) + ((indiceCor - 7) * 80);
+			int posY = papp.screenHeight/2 - 22;
+			papp.image(imgSeletorCor, posX, posY);
 
 			//Obtém a cor do fundo
-			int zeroX = pApplet.screenWidth/2 - imgPalhetaCores.width/2;
+			int zeroX = papp.screenWidth/2 - imgPalhetaCores.width/2;
 			int posXRelativo = (posX - zeroX) - 40;
 			color = colors[(int)posXRelativo/80];
-//			color = Util.getColor(pApplet, posX, posY);
+//			color = Util.getColor(papp, posX, posY);
 
-			timestampSelecaoCor = pApplet.millis();
+			timestampSelecaoCor = papp.millis();
 			visible = true;
 		}
 	}
@@ -88,8 +88,8 @@ public class PalhetaCores extends UIComponent implements ColorListener {
 	}
 
 	public boolean isOver(Cursor cursor) {
-		int posX = pApplet.screenWidth/2;
-		int posY = pApplet.screenHeight;
+		int posX = papp.screenWidth/2;
+		int posY = papp.screenHeight;
 		return ObjectUtil.isOver(posX, posY, cursor.getX(), cursor.getY(), imgMenu.width/2);
 	}
 

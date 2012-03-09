@@ -83,54 +83,13 @@ public class Brush implements ColorListener {
 		//System.err.println("time: " + (t2 - t1));
 	}
 	
-	public static final boolean EXPMAGIC = true;
-	public static final boolean NEWMAGIC = true;
-	
 	/*
 	 * magic: do not touch.
 	 * 
 	 */
 	public double magic(double x)
 	{
-		if (EXPMAGIC)
-		{
-			// NOTE: This is teh best magic so far. Seriously.
-			return Math.sqrt((Math.exp(x) - 1)/(Math.E-1));
-		}
-		
-		else if (NEWMAGIC)
-		{
-		final double
-			x0 = 0,		y0 = 0,
-			x1 = .2,	y1 = .2 * .8,
-			x2 = .4,	y2 = .4 * .8,
-			x3 = 1,		y3 = 1
-			;
-		
-		return Math.sqrt(
-			(y0 * (x - x1) *  (x - x2) * (x - x3))/((x0 - x1) *  (x0 - x2) * (x0 - x3)) +
-			(y1 * (x - x0) *  (x - x2) * (x - x3))/((x1 - x0) *  (x1 - x2) * (x1 - x3)) +
-			(y2 * (x - x1) *  (x - x0) * (x - x3))/((x2 - x1) *  (x2 - x0) * (x2 - x3)) +
-			(y3 * (x - x1) *  (x - x2) * (x - x0))/((x3 - x1) *  (x3 - x2) * (x3 - x0)))
-			;
-		}
-		
-		else
-		{
-			final double
-				x0 = 0,		y0 = 0,
-				x1 = .05,	y1 = .1,
-				x2 = .9,	y2 = .8,			
-				x3 = 1,		y3 = 1
-				;
-			
-			return 
-				(y0 * (x - x1) *  (x - x2) * (x - x3))/((x0 - x1) *  (x0 - x2) * (x0 - x3)) +
-				(y1 * (x - x0) *  (x - x2) * (x - x3))/((x1 - x0) *  (x1 - x2) * (x1 - x3)) +
-				(y2 * (x - x1) *  (x - x0) * (x - x3))/((x2 - x1) *  (x2 - x0) * (x2 - x3)) +
-				(y3 * (x - x1) *  (x - x2) * (x - x0))/((x3 - x1) *  (x3 - x2) * (x3 - x0))
-				;
-		}
+		return Math.sqrt((Math.exp(x) - 1)/(Math.E-1));
 	}
 	
 	private static final boolean NEWSPRAY = true;

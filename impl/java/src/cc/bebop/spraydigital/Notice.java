@@ -37,7 +37,7 @@ public class Notice extends UIComponent {
 	
 	public void draw() {
 		//Se já tiver passado o delay para esconder, o faz e finaliza a seleção de cor
-		if(visible && pApplet.millis() - timestampNotice > DELAY_NOTICE) {
+		if(visible && papp.millis() - timestampNotice > DELAY_NOTICE) {
 			hide();
 		}
 	}
@@ -52,18 +52,18 @@ public class Notice extends UIComponent {
 		if(!visible)
 			saveState();
 		
-		pApplet.imageMode(PApplet.CORNER);
-		pApplet.image(imageLogo, pApplet.screenWidth - imageLogo.width - 15, 15);
+		papp.imageMode(PApplet.CORNER);
+		papp.image(imageLogo, papp.screenWidth - imageLogo.width - 15, 15);
 			
-		pApplet.imageMode(PApplet.CENTER);
+		papp.imageMode(PApplet.CENTER);
 
-		pApplet.image(
+		papp.image(
 				imageNotice, 
-				pApplet.screenWidth/2,
-				pApplet.screenHeight/2
+				papp.screenWidth/2,
+				papp.screenHeight/2
 				);
 
-		timestampNotice = pApplet.millis();
+		timestampNotice = papp.millis();
 		visible = true;
 	}
 
@@ -78,8 +78,8 @@ public class Notice extends UIComponent {
 	}
 
 	public boolean isOver(Cursor cursor) {
-		//int posX = pApplet.screenWidth/2;
-		//int posY = pApplet.screenHeight;
+		//int posX = papp.screenWidth/2;
+		//int posY = papp.screenHeight;
 		//return ObjectUtil.isOver(posX, posY, cursor.getX(), cursor.getY(), imgNotice.width/2);
 		/* FIXME: do something */
 		return false;

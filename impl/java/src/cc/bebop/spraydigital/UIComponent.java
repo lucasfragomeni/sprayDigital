@@ -8,7 +8,7 @@ import processing.core.PImage;
 
 abstract class UIComponent {
 
-	protected PApplet pApplet;
+	protected PApplet papp;
 	private PImage imgState;
 	
 	protected int x;
@@ -19,7 +19,7 @@ abstract class UIComponent {
 	protected List<UIComponent> children = new ArrayList<UIComponent>(); 
 	
 	public UIComponent(PApplet pApplet) {
-		this.pApplet = pApplet;
+		this.papp = pApplet;
 	}
 
 	public void draw() {
@@ -37,23 +37,23 @@ abstract class UIComponent {
 	}
 	
 	protected void saveState() {
-		imgState = pApplet.get();
+		imgState = papp.get();
 		
 		/*
 		System.err.printf(
 				"state: (%d, %d); screen: (%d, %d);",
 				imgState.width,
 				imgState.height,
-				pApplet.screenWidth,
-				pApplet.screenHeight
+				papp.screenWidth,
+				papp.screenHeight
 				);
 				*/
 	}
 	
 	protected void revertState() {
 		if(imgState != null) {
-			pApplet.imageMode(PApplet.CORNER);
-			pApplet.image(imgState, 0, 0);
+			papp.imageMode(PApplet.CORNER);
+			papp.image(imgState, 0, 0);
 		}
 	}
 

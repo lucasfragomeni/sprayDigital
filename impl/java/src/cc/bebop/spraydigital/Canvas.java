@@ -32,6 +32,8 @@ public class Canvas extends UIComponent implements DistanceListener {
 	private long
 			t1, t2
 			;
+	
+	private int Q = 30000;
 
 	private double K = Math.tan(Math.PI / 4) / 6;
 	
@@ -53,7 +55,7 @@ public class Canvas extends UIComponent implements DistanceListener {
 		if(hist.size() >= HIST_MAX)
 			hist.removeLast();
 
-		hist.push(pApplet.get());
+		hist.push(papp.get());
 		return hist.size();
 	}
 
@@ -63,16 +65,23 @@ public class Canvas extends UIComponent implements DistanceListener {
 			return hist.size();
 
 		hist.pop();
-		pApplet.image(hist.getFirst(), 0, 0);
+		papp.image(hist.getFirst(), 0, 0);
 		return hist.size();
 	}
 
 	private Brush brush;
+	
+	/////////////////
+	// Constructor //
+	/////////////////
 
-	public Canvas(PApplet pApplet)
+	public Canvas(PApplet pApplet, int Q)
 	{
 		super(pApplet);
 		this.inicializarEfeitosSonoros();
+		
+		this.Q = Q;
+		// TODO: this.K = K;
 		
 		z2 = 100;
 		r2 = z2 * K;
@@ -80,13 +89,13 @@ public class Canvas extends UIComponent implements DistanceListener {
 		z1 = z2;
 		z1 = z1 + 0;
 		r1 = r2;
-
+		
 		hist = new LinkedList<PImage>();
 		histClear();
 		histAdd();
 	}
 
-	public void setBrush(Brush brush)
+	public void setBrush(Brush brush) 
 	{
 		this.brush = brush;
 	}
@@ -97,6 +106,10 @@ public class Canvas extends UIComponent implements DistanceListener {
 
 	public void draw()
 	{
+//		long T1, T2;
+//		
+//		T1 = System.currentTimeMillis();
+		
 		if(cursorAtual == null)
 		{
 			if(cursorAtualizado)
@@ -109,32 +122,37 @@ public class Canvas extends UIComponent implements DistanceListener {
 			return;
 		}
 		
-		if((!cursorAtualizado) && ((pApplet.millis() - t1) < cursorTimeout))
+		if((!cursorAtualizado) && ((papp.millis() - t1) < cursorTimeout))
 			return;
 		
 		cursorAtualizado = false;
 		
-		t2 = pApplet.millis();
+		t2 = papp.millis();
 				
-		int Q = (int) (45000 * (t2 - t1)) / 1000;
-		//int Q = (int) (15000 * (t2 - t1)) / 1000;
-		
 		//System.err.printf("sprayLine(\n%f, %f, %f, \n%f, %f, %f, \n%f)\n", x1, y1, r1, x2, y2, r2, Q);
 		
-		brush.sprayLine(x1, y1, r1, x2, y2, r2, Q);
+		brush.sprayLine(
+				x1, y1, r1,
+				x2, y2, r2,
+				(int) ((Q * (t2 - t1)) / 1000)
+				);
 
 		x1 = x2;
 		y1 = y2;
 		z1 = z2;
 		r1 = r2;
 		t1 = t2;
+		
+//		T2 = System.currentTimeMillis();
+//		
+//		System.err.println("TIEM " + (T2 - T1));
 	}
 
 	void reset()
 	{
 		emptycan.play();
 		emptycan.rewind();
-		pApplet.delay(2000);
+		papp.delay(2000);
 		canshake.play();
 		canshake.rewind();
 	}
@@ -165,7 +183,7 @@ public class Canvas extends UIComponent implements DistanceListener {
 				
 		x2 = cursorAtual.getX();
 		y2 = cursorAtual.getY();
-		t2 = pApplet.millis();
+		t2 = papp.millis();
 
 		x1 = x2;
 		y1 = y2;
@@ -194,7 +212,7 @@ public class Canvas extends UIComponent implements DistanceListener {
 		
 		x2 = cursorAtual.getX();
 		y2 = cursorAtual.getY();
-		t2 = pApplet.millis();
+		t2 = papp.millis();
 		
 		cursorAtualizado = true;
 		
@@ -215,7 +233,7 @@ public class Canvas extends UIComponent implements DistanceListener {
 		
 		x2 = cursorAtual.getX();
 		y2 = cursorAtual.getY();
-		t2 = pApplet.millis();
+		t2 = papp.millis();
 		
 		cursorAtual = null;
 		
@@ -242,9 +260,9 @@ public class Canvas extends UIComponent implements DistanceListener {
 
 	void inicializarEfeitosSonoros()
 	{
-		Ess.start(pApplet);
+		Ess.start(papp);
 
-		minim = new Minim(pApplet);
+		minim = new Minim(papp);
 		canshake = minim.loadSnippet("canshake.mp3");
 		emptycan = minim.loadSnippet("emptycan.aiff");
 		airspray = new AudioChannel("airspray.wav");
@@ -255,8 +273,8 @@ public class Canvas extends UIComponent implements DistanceListener {
 
 	void loop(AudioChannel channel) {
 		// randomly move the in and out loop points
-		channel.in((int)(pApplet.random(channel.size/3)));
-		channel.out(channel.size-1-(int)(pApplet.random(channel.size/3)));
+		channel.in((int)(papp.random(channel.size/3)));
+		channel.out(channel.size-1-(int)(papp.random(channel.size/3)));
 		// snap the in loop point to the nearest zero crossing
 		channel.snapInToZero();
 		// snap the out loop point to the nearest zero crossing

@@ -10,11 +10,8 @@
             <packagesToUnSeal/>
         </sealing>
     </manifest>
-    <selectedElements exportClassFiles="true" exportJavaFiles="false" exportOutputFolder="false">
+    <selectedElements exportClassFiles="true" exportJavaFiles="true" exportOutputFolder="false">
         <javaElement handleIdentifier="=SprayDigital/src"/>
-        <file path="/SprayDigital/.project"/>
-        <file path="/SprayDigital/.classpath"/>
-        <folder path="/SprayDigital/lib"/>
-        <file path="/SprayDigital/jardesc.jardesc"/>
+        <folder path="/SprayDigital/data"/>
     </selectedElements>
 </jardesc>

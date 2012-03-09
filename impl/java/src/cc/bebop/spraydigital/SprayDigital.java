@@ -5,7 +5,7 @@ import TUIO.TuioCursor;
 import TUIO.TuioObject;
 import TUIO.TuioProcessing;
 import TUIO.TuioTime;
-import cc.bebop.util.Smoother;
+//import cc.bebop.util.Smoother;
 
 //import cc.bebop.processing.util.*;
 
@@ -18,7 +18,7 @@ public class SprayDigital extends PApplet {
 	
 	TuioProcessing tuio;
 	Workspace workspace;
-	Smoother smoother;
+	// Smoother smoother;
 
 	///////////
 	// Setup //
@@ -41,17 +41,22 @@ public class SprayDigital extends PApplet {
 		// For some reason, we cannot call size(screenWidth, screenHeight,
 		// OPENGL).
 		//
+		// NOTE3:
+		//
+		// NOTE2 only applies when trying to execute as applet from eclipse.
+		//
+		//size(screenWidth, screenHeight, OPENGL);
 		size(1280, 720, OPENGL);
 		smooth();
 		frameRate(30);
 
 		tuio = new TuioProcessing(this);
 		workspace = new Workspace(this);
-		smoother = new Smoother();
-		
-		//((PGraphicsOpenGL) g).gl.glDisable(GL.GL_LIGHTING);
-		//((PGraphicsOpenGL) g).gl.glDisable(GL.GL_CULL_FACE);
-		//((PGraphicsOpenGL) g).gl.glDisable(GL.GL_DEPTH_TEST);
+		// smoother = new Smoother();
+
+		// ((PGraphicsOpenGL) g).gl.glDisable(GL.GL_LIGHTING);
+		// ((PGraphicsOpenGL) g).gl.glDisable(GL.GL_CULL_FACE);
+		// ((PGraphicsOpenGL) g).gl.glDisable(GL.GL_DEPTH_TEST);
 	}
 
 	//////////
@@ -91,23 +96,6 @@ public class SprayDigital extends PApplet {
 		}
 	}
 
-	//////////
-	// main //
-	//////////
-
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		try {
-			PApplet.main(args);
-		}
-		
-		catch (RuntimeException e) {
-			e.printStackTrace();
-		}
-	}
-
 	//////////////
 	// keyboard //
 	//////////////
@@ -127,36 +115,36 @@ public class SprayDigital extends PApplet {
 
 	public void addTuioCursor(TuioCursor tuioCursor) {
 		if (cursor == null) {
-			smoother = new Smoother(tuioCursor.getScreenX(width),
-					tuioCursor.getScreenY(height));
-			cursor = new Cursor(smoother.getSmoothedX(),
-					smoother.getSmoothedY(), tuioCursor.getCursorID());
-			// cursor = new Cursor(tuioCursor.getScreenX(width),
-			// tuioCursor.getScreenY(height), tuioCursor.getCursorID());
+			// smoother = new Smoother(tuioCursor.getScreenX(width),
+			// tuioCursor.getScreenY(height));
+			// cursor = new Cursor(smoother.getSmoothedX(),
+			// smoother.getSmoothedY(), tuioCursor.getCursorID());
+			cursor = new Cursor(tuioCursor.getScreenX(width),
+					tuioCursor.getScreenY(height), tuioCursor.getCursorID());
 			addCursor = true;
 		}
 	}
 
 	public void updateTuioCursor(TuioCursor tuioCursor) {
 		if (cursor != null) {
-			smoother.smooth(tuioCursor.getScreenX(width),
-					tuioCursor.getScreenY(height));
-			cursor.setX(smoother.getSmoothedX());
-			cursor.setY(smoother.getSmoothedY());
-			// cursor.setX(tuioCursor.getScreenX(width));
-			// cursor.setY(tuioCursor.getScreenY(height));
+			// smoother.smooth(tuioCursor.getScreenX(width),
+			// tuioCursor.getScreenY(height));
+			// cursor.setX(smoother.getSmoothedX());
+			// cursor.setY(smoother.getSmoothedY());
+			cursor.setX(tuioCursor.getScreenX(width));
+			cursor.setY(tuioCursor.getScreenY(height));
 			updateCursor = true;
 		}
 	}
 
 	public void removeTuioCursor(TuioCursor tuioCursor) {
 		if (cursor != null) {
-			smoother.smooth(tuioCursor.getScreenX(width),
-					tuioCursor.getScreenY(height));
-			cursor.setX(smoother.getSmoothedX());
-			cursor.setY(smoother.getSmoothedY());
-			// cursor.setX(tuioCursor.getScreenX(width));
-			// cursor.setY(tuioCursor.getScreenY(height));
+			// smoother.smooth(tuioCursor.getScreenX(width),
+			// tuioCursor.getScreenY(height));
+			// cursor.setX(smoother.getSmoothedX());
+			// cursor.setY(smoother.getSmoothedY());
+			cursor.setX(tuioCursor.getScreenX(width));
+			cursor.setY(tuioCursor.getScreenY(height));
 			removeCursor = true;
 		}
 	}
@@ -177,8 +165,25 @@ public class SprayDigital extends PApplet {
 	// Processing //
 	////////////////
 
-//	public void stop() {
-//		workspace.stop();
-//		super.stop();
-//	}
+	public void stop() {
+		workspace.stop();
+		super.stop();
+	}
+
+	//////////
+	// main //
+	//////////
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		try {
+			PApplet.main(args);
+		}
+		
+		catch (RuntimeException e) {
+			e.printStackTrace();
+		}
+	}
 }

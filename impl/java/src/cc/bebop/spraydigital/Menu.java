@@ -25,7 +25,7 @@ public class Menu extends UIComponent {
 
 		//Posiciona o menu no canto inferior esquerdo, meio escondido
 		x = - (imgMenu.width/2) + 40;
-		y = pApplet.screenHeight/2; //pApplet.screenHeight + 70;// + 180;
+		y = pApplet.screenHeight/2; //papp.screenHeight + 70;// + 180;
 		width = imgMenu.width;
 		height = imgMenu.height;
 	}
@@ -34,12 +34,12 @@ public class Menu extends UIComponent {
 //		if(openingMenu) {
 //			if(menuCounter < 40) {
 //				revertState();
-//				pApplet.noStroke();
-//				pApplet.fill(200, 127);
-//				pApplet.rectMode(PApplet.CORNER);
+//				papp.noStroke();
+//				papp.fill(200, 127);
+//				papp.rectMode(PApplet.CORNER);
 //				
 //				width = menuCounter;
-//				pApplet.rect(x, y, width, height);
+//				papp.rect(x, y, width, height);
 //
 //				menuCounter += 2;
 //			} else {
@@ -49,12 +49,12 @@ public class Menu extends UIComponent {
 //		} else if(hidingMenu) {
 //			if(menuCounter >= 0) {
 //				paintScreen();
-//				pApplet.noStroke();
-//				pApplet.fill(200, 127);
-//				pApplet.rectMode(PApplet.CORNER);
+//				papp.noStroke();
+//				papp.fill(200, 127);
+//				papp.rectMode(PApplet.CORNER);
 //
 //				width = menuCounter;
-//				pApplet.rect(x, y, width, height);
+//				papp.rect(x, y, width, height);
 //
 //				menuCounter -= 2;
 //			} else {
@@ -64,14 +64,14 @@ public class Menu extends UIComponent {
 //		} else {
 
 //			if(isVisible()) {
-//				pApplet.imageMode(PApplet.CENTER);
-//				pApplet.image(imgMenu, x, y);
+//				papp.imageMode(PApplet.CENTER);
+//				papp.image(imgMenu, x, y);
 //			}
 
-//				pApplet.stroke(255);
-//				pApplet.fill(127);
-//				pApplet.ellipseMode(PApplet.CENTER);
-//				pApplet.ellipse(x, y, width, height);
+//				papp.stroke(255);
+//				papp.fill(127);
+//				papp.ellipseMode(PApplet.CENTER);
+//				papp.ellipse(x, y, width, height);
 //			}
 //		}
 	}

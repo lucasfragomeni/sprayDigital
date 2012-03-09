@@ -1,5 +1,6 @@
 package cc.bebop.spraydigital;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Properties;
 
@@ -10,6 +11,7 @@ import cc.bebop.spraydigital.event.ButtonListener;
 import cc.bebop.spraydigital.event.ColorEvent;
 //import cc.bebop.spraydigital.network.TwitpicService;
 import cc.bebop.spraydigital.event.ColorListener;
+import cc.bebop.spraydigital.network.TwitpicService;
 
 public class Workspace implements ButtonListener, ColorListener
 {
@@ -29,7 +31,7 @@ public class Workspace implements ButtonListener, ColorListener
 	 */
 	//private TwitpicService twitpicService;
 	
-	private PApplet pApplet;
+	private PApplet papp;
 
 	//private static final int FUNDO = 255;
 
@@ -57,7 +59,7 @@ public class Workspace implements ButtonListener, ColorListener
 		imageNoticeUndo
 		;
 
-	public Workspace(PApplet pApplet)
+	public Workspace(PApplet papp)
 	{
 		/*
 		 * read properties file
@@ -65,7 +67,7 @@ public class Workspace implements ButtonListener, ColorListener
 		 */
 		try
 		{
-			props.load(pApplet.createReader(propsPath));
+			props.load(papp.createReader(propsPath));
 		}
 		
 		catch (IOException e)
@@ -74,19 +76,19 @@ public class Workspace implements ButtonListener, ColorListener
 			e.printStackTrace();
 		}
 		
-		imageNoticeSave = pApplet.loadImage("imageNoticeSave.png");
-		imageNoticeClean = pApplet.loadImage("imageNoticeClean.png");
-		imageNoticeUndo = pApplet.loadImage("imageNoticeUndo.png");
+		imageNoticeSave = papp.loadImage("imageNoticeSave.png");
+		imageNoticeClean = papp.loadImage("imageNoticeClean.png");
+		imageNoticeUndo = papp.loadImage("imageNoticeUndo.png");
 		
-		/*
-		twitpicService = new TwitpicService(
+		// EXPERIMENTAL: twitpic
+		TwitpicService.init(
 				props.getProperty("twitpic.user"),
 				props.getProperty("twitpic.pass"),
-				props.getProperty("twitpic.text")
-				);
-		*/
-
-		this.pApplet = pApplet;
+				props.getProperty("twitpic.text"),
+				Long.parseLong(props.getProperty("twitpic.delay"))
+		);
+		
+		this.papp = papp;
 		
 		//this.pApplet.fill(0);
 		//this.pApplet.smooth();
@@ -95,27 +97,31 @@ public class Workspace implements ButtonListener, ColorListener
 		//System.err.println("1 TIEM: " + System.currentTimeMillis());
 
 		//Ponteiras
-		brush = new Brush(pApplet);
+		brush = new Brush(papp);
 		
 		//System.err.println("2 TIEM: " + System.currentTimeMillis());
 
 		//Componentes
-		canvas = new Canvas(pApplet);
+		canvas = new Canvas(
+				papp,
+				Integer.parseInt(props.getProperty("canvas.discharge"))
+		);
+		
 		canvas.setBrush(brush);
 		
 		//System.err.println("3 TIEM: " + System.currentTimeMillis());
 
-		palhetaCores = new PalhetaCores(pApplet);
+		palhetaCores = new PalhetaCores(papp);
 		palhetaCores.addColorChangeListener(brush);
 		
 		//System.err.println("4 TIEM: " + System.currentTimeMillis());
 		
-		notice = new Notice(pApplet, imageNoticeSave);
+		notice = new Notice(papp, imageNoticeSave);
 		
 		//System.err.println("5 TIEM: " + System.currentTimeMillis());
 
 		//Interface c/ Hardware
-		sprayCan = new SprayCan(pApplet, props.getProperty("SprayCan.port"));
+		sprayCan = new SprayCan(papp, props.getProperty("SprayCan.port"));
 		sprayCan.addDistanceChangeListener(canvas);
 		sprayCan.addColorChangeListener(this);
 		sprayCan.addColorChangeListener(palhetaCores);
@@ -143,7 +149,10 @@ public class Workspace implements ButtonListener, ColorListener
 	public void actionSave()
 	{
 		String path = props.getProperty("savePrefix") + System.currentTimeMillis() + ".jpg";
-		pApplet.saveFrame(path);
+		papp.saveFrame(path);
+		
+		// EXPERIMENTAL: twitpic
+		TwitpicService.getInstance().queue(new File(path));
 		
 		actionClean();
 	}
@@ -156,7 +165,7 @@ public class Workspace implements ButtonListener, ColorListener
 	public void actionClean()
 	{
 		canvas.reset();
-		pApplet.image(pApplet.loadImage("brickwall.jpg"), 0, 0);
+		papp.image(papp.loadImage("brickwall.jpg"), 0, 0);
 		canvas.histClear();
 		canvas.histAdd();
 	}
@@ -171,7 +180,7 @@ public class Workspace implements ButtonListener, ColorListener
 
 	public void addCursor(Cursor cursor)
 	{
-		cursorTimestamp = pApplet.millis();
+		cursorTimestamp = papp.millis();
 
 		if(palhetaCores.isVisible())
 			palhetaCores.hide();
@@ -205,7 +214,7 @@ public class Workspace implements ButtonListener, ColorListener
 	{
 		/*
 		boolean click = false;
-		if(pApplet.millis() - cursorTimestamp <= DELAY_CLICK)
+		if(papp.millis() - cursorTimestamp <= DELAY_CLICK)
 		{
 			click = true;
 		}
@@ -239,7 +248,7 @@ public class Workspace implements ButtonListener, ColorListener
 
 	public void keyPressed()
 	{		
-		switch(pApplet.key)
+		switch(papp.key)
 		{
 		/* blank */
 		case ' ':
@@ -274,7 +283,7 @@ public class Workspace implements ButtonListener, ColorListener
 		case '8':
 		case '9':
 			/* somewhat hacky, but works */
-			palhetaCores.colorChanged(new ColorEvent(this, pApplet.key - '0'));
+			palhetaCores.colorChanged(new ColorEvent(this, papp.key - '0'));
 			break;
 		
 		/* wat */
@@ -289,9 +298,9 @@ public class Workspace implements ButtonListener, ColorListener
 			return;
 		
 		//System.err.println("button press");
-		if(pApplet.millis() > buttonTimeout || buttonLastAction != event.getAction())
+		if(papp.millis() > buttonTimeout || buttonLastAction != event.getAction())
 		{
-			buttonTimeout = pApplet.millis() + buttonDelay;
+			buttonTimeout = papp.millis() + buttonDelay;
 			buttonLastAction = event.getAction();
 			
 			if(palhetaCores.isVisible())
@@ -349,7 +358,7 @@ public class Workspace implements ButtonListener, ColorListener
 			break;
 		}
 		
-		//buttonTimeout = pApplet.millis() + buttonDelay;
+		//buttonTimeout = papp.millis() + buttonDelay;
 		//buttonLastAction = event.getAction();
 		
 		buttonTimeout = 0;
