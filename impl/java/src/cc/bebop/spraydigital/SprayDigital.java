@@ -165,10 +165,10 @@ public class SprayDigital extends PApplet {
 	// Processing //
 	////////////////
 
-	public void stop() {
-		workspace.stop();
-		super.stop();
-	}
+	//public void stop() {
+	//	workspace.stop();
+	//	super.stop();
+	//}
 
 	//////////
 	// main //

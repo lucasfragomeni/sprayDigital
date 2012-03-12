@@ -100,13 +100,19 @@ public class TwitpicService implements Runnable
 	// Twit //
 	//////////
 
+	/**
+	 * Twit pic.
+	 * 
+	 * @param pic to be twitted.
+	 * @throws IOException
+	 * @throws TwitPicException
+	 */
 	private synchronized void twit(Object pic) throws IOException, TwitPicException
 	{
 		TwitPicResponse res;
 		
 		// NOTE: this should absolutely be true
 		assert (pic instanceof byte[] || pic instanceof File);
-
 
 		res = null;
 
@@ -148,6 +154,11 @@ public class TwitpicService implements Runnable
 	// Queue //
 	///////////
 	
+	/**
+	 * Queue pic to be twitted by thread.
+	 * 
+	 * @param pic to be twitted.
+	 */
 	private void queue(Object pic)
 	{
 		synchronized (this) {

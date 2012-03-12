@@ -57,7 +57,8 @@ public class PalhetaCores extends UIComponent implements ColorListener {
 			revertState();
 
 			papp.imageMode(PApplet.CORNER);
-			papp.image(imgBebop, papp.screenWidth - imgBebop.width - 15, 15);
+			//papp.image(imgBebop, papp.screenWidth - imgBebop.width - 15, 15);
+			papp.image(imgBebop, papp.screenWidth - imgBebop.width - 64, 64);
 
 			papp.imageMode(PApplet.CENTER);
 			papp.image(imgPalhetaCores, papp.screenWidth/2, papp.screenHeight/2);

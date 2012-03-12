@@ -53,7 +53,8 @@ public class Notice extends UIComponent {
 			saveState();
 		
 		papp.imageMode(PApplet.CORNER);
-		papp.image(imageLogo, papp.screenWidth - imageLogo.width - 15, 15);
+		//papp.image(imageLogo, papp.screenWidth - imageLogo.width - 15, 15);
+		papp.image(imageLogo, papp.screenWidth - imageLogo.width - 64, 64);
 			
 		papp.imageMode(PApplet.CENTER);
 
