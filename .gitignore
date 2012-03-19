@@ -2,4 +2,8 @@
 
 impl/processing/SprayDigital/save/
 impl/java/bin
+impl/java/save
 impl/java/data/save
+
+impl/processing/SprayDigital/application*
+impl/processing/SprayDigital/save

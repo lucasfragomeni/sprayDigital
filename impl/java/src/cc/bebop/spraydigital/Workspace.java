@@ -2,6 +2,8 @@ package cc.bebop.spraydigital;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.Properties;
 
 import processing.core.PApplet;
@@ -9,7 +11,6 @@ import processing.core.PImage;
 import cc.bebop.spraydigital.event.ButtonEvent;
 import cc.bebop.spraydigital.event.ButtonListener;
 import cc.bebop.spraydigital.event.ColorEvent;
-//import cc.bebop.spraydigital.network.TwitpicService;
 import cc.bebop.spraydigital.event.ColorListener;
 import cc.bebop.spraydigital.network.TwitpicService;
 
@@ -67,7 +68,16 @@ public class Workspace implements ButtonListener, ColorListener
 		 */
 		try
 		{
-			props.load(papp.createReader(propsPath));
+			Reader reader;
+			
+			reader = new InputStreamReader(
+					papp.createInput(propsPath),
+					"ISO-8859-1"
+			);
+			
+			props.load(reader);
+			
+			reader.close();
 		}
 		
 		catch (IOException e)

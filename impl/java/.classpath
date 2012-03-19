@@ -30,7 +30,7 @@
 	<classpathentry kind="lib" path="lib/Ess.jar"/>
 	<classpathentry kind="lib" path="lib/libTUIO.jar"/>
 	<classpathentry kind="lib" path="lib/TUIO.jar"/>
-	<classpathentry kind="lib" path="lib/twitpic4j.jar"/>
 	<classpathentry kind="lib" path="lib/processing/lib/core.jar"/>
+	<classpathentry kind="lib" path="lib/twitpic4j.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

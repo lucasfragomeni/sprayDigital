@@ -111,6 +111,8 @@ public class TwitpicService implements Runnable
 	{
 		TwitPicResponse res;
 		
+		System.err.println("twitin");
+		
 		// NOTE: this should absolutely be true
 		assert (pic instanceof byte[] || pic instanceof File);
 
