@@ -1,59 +1,86 @@
 package cc.bebop.spraydigital.network;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.LinkedList;
 
-import com.harrison.lee.twitpic4j.TwitPic;
-import com.harrison.lee.twitpic4j.TwitPicResponse;
-import com.harrison.lee.twitpic4j.exception.TwitPicException;
+import twitter4j.Status;
+import twitter4j.Twitter;
+import twitter4j.TwitterException;
+import twitter4j.TwitterFactory;
+import twitter4j.conf.Configuration;
+import twitter4j.conf.ConfigurationBuilder;
+import twitter4j.media.ImageUpload;
+import twitter4j.media.ImageUploadFactory;
+import twitter4j.media.MediaProvider;
 
 /**
  * Act as interface to Twitpic service.
  * 
  * @author IGOrrrr
- *
+ * 
  */
-public class TwitpicService implements Runnable
-{
+public class TwitpicService implements Runnable {
 	private static TwitpicService instance; // we are singleton
 	private static Thread thread; // service thread
 	private static boolean done; // done?
-	
-	private TwitPic tp; // Twitpic
+
+	Configuration twitConf;
+	Twitter twitter;
+	TwitterFactory twitFactory;
+	ImageUploadFactory twitUpFactory;
+	ImageUpload twitImgUp;
 	private LinkedList<Object> queue; // queue
-	
-//	private String user; // username
-//	private String pass; // password
-	
-	private String text; // post text
+
+	// private String user; // username
+	// private String pass; // password
+
+	private String caption; // post caption
 	private long delay;
-	
+
 	/////////////////
 	// Constructor //
 	/////////////////
 
 	/**
-	 * @param user
-	 * @param pass
-	 * @param text to send along teh picture
-	 * @param delay between uploads
+	 * Constructor
+	 * 
+	 * @param consumerKey
+	 * @param consumerSecret
+	 * @param accessToken
+	 * @param accessTokenSecret
+	 * @param mediaProviderAPIKey
+	 * @param caption
+	 * @param delay
 	 */
-	private TwitpicService(String user, String pass, String text, long delay)
+	private TwitpicService(
+			String consumerKey,
+			String consumerSecret,
+			String accessToken,
+			String accessTokenSecret,
+			String mediaProviderAPIKey,
+			String caption,
+			long delay
+	)
 	{
-//		this.user = user;
-//		this.pass = pass;
-		this.text = text;
+		twitConf = new ConfigurationBuilder()
+				.setMediaProviderAPIKey(mediaProviderAPIKey)
+				.setOAuthConsumerKey(consumerKey)
+				.setOAuthConsumerSecret(consumerSecret)
+				.setOAuthAccessToken(accessToken)
+				.setOAuthAccessTokenSecret(accessTokenSecret).build();
+		
+		twitFactory = new TwitterFactory(twitConf);
+		twitUpFactory = new ImageUploadFactory(twitConf);
+
+		twitter = twitFactory.getInstance();
+		twitImgUp = twitUpFactory.getInstance(MediaProvider.TWITPIC);
+
+		this.caption = caption;
 		this.delay = delay;
 
 		queue = new LinkedList<Object>();
-		tp = new TwitPic(user, pass);
-		
-		System.err.println("user = " + user);
-		System.err.println("pass = " + pass);
-		System.err.println("text = " + text);
 	}
-	
+
 	/**
 	 * @return instance
 	 */
@@ -61,26 +88,39 @@ public class TwitpicService implements Runnable
 	{
 		return instance;
 	}
-	
+
 	/////////////////////////////////////
 	// Initialization and finalization //
 	/////////////////////////////////////
-	
+
 	/**
 	 * Initialize teh service.
 	 * 
-	 * @param user
-	 * @param pass
-	 * @param text to send along teh picture
-	 * @param delay between uploads
+	 * @param consumerKey
+	 * @param consumerSecret
+	 * @param accessToken
+	 * @param accessTokenSecret
+	 * @param mediaProviderAPIKey
+	 * @param caption
+	 * @param delay
 	 */
-	public static void init(String user, String pass, String text, long delay)
+	public static void init(
+			String consumerKey,
+			String consumerSecret,
+			String accessToken,
+			String accessTokenSecret,
+			String mediaProviderAPIKey,
+			String caption,
+			long delay
+	)
 	{
-		instance = new TwitpicService(user, pass, text, delay);
+		instance = new TwitpicService(consumerKey, consumerSecret, accessToken,
+				accessTokenSecret, mediaProviderAPIKey, caption, delay);
+
 		thread = new Thread(instance);
 		thread.start();
 	}
-	
+
 	/**
 	 * Finalize teh service.
 	 * 
@@ -89,13 +129,13 @@ public class TwitpicService implements Runnable
 	public void fini() throws InterruptedException
 	{
 		done = true;
-		
+
 		thread.interrupt();
-		
+
 		thread.join();
 		instance = null;
 	}
-	
+
 	//////////
 	// Twit //
 	//////////
@@ -103,63 +143,95 @@ public class TwitpicService implements Runnable
 	/**
 	 * Twit pic.
 	 * 
-	 * @param pic to be twitted.
-	 * @throws IOException
-	 * @throws TwitPicException
+	 * @param pic
+	 * @throws TwitterException
 	 */
-	private synchronized void twit(Object pic) throws IOException, TwitPicException
+	private synchronized void twit(Object pic) throws TwitterException
 	{
-		TwitPicResponse res;
-		
+		String url;
+		Status status;
+
 		System.err.println("twitin");
-		
+
 		// NOTE: this should absolutely be true
 		assert (pic instanceof byte[] || pic instanceof File);
 
-		res = null;
+		if (pic instanceof File) {
+			
+			// twitpic
+			while (true) {
+				try {
+					url = twitImgUp.upload((File) pic, caption);
+				}
+				
+				catch (TwitterException e) {
+					e.printStackTrace();
+					System.out.println("Failed to twitImgUp the image: "
+							+ e.getMessage());
+					continue;
+					// retry forever
+				}
+				
+				System.out.println("Successfully twitpiced at " + url);
+				break;
+			}
+			
+			// twit
+			while (true) {
+				try {
+					status = twitter.updateStatus(caption + " " + url);
+				}
+				
+				catch (TwitterException e) {
+					e.printStackTrace();
+					System.out.println("Failed to twitImgUp the image: "
+							+ e.getMessage());
+					continue;
+					// retry forever
+				}
+				
+				System.out.println("Successfully twited at " +
+						status.getSource());
+				break;
+			}
+		}
 
-		if (pic instanceof byte[])
-			res = tp.uploadAndPost((byte[]) pic, text);
-
-		else if (pic instanceof File)
-			res = tp.uploadAndPost((File) pic, text);
-
-		if (res != null)
-			res.dumpVars();
+		else {
+			System.err.println("EXPLODE");
+			System.exit(-1);
+		}
 	}
 
 	/**
 	 * Twit pic.
 	 * 
-	 * @param pic to be twitted.
-	 * @throws IOException
-	 * @throws TwitPicException
+	 * @param pic
+	 * @throws TwitterException
 	 */
-	public void twit(byte[] pic) throws IOException, TwitPicException
+	public void twit(byte[] pic) throws TwitterException
 	{
 		twit((Object) pic);
 	}
-	
+
 	/**
 	 * Twit pic.
 	 * 
-	 * @param pic to be twitted.
-	 * @throws IOException
-	 * @throws TwitPicException
+	 * @param pic
+	 * @throws TwitterException
 	 */
-	public void twit(File pic) throws IOException, TwitPicException
+	public void twit(File pic) throws TwitterException
 	{
 		twit((Object) pic);
 	}
-	
+
 	///////////
 	// Queue //
 	///////////
-	
+
 	/**
 	 * Queue pic to be twitted by thread.
 	 * 
-	 * @param pic to be twitted.
+	 * @param pic
 	 */
 	private void queue(Object pic)
 	{
@@ -167,21 +239,21 @@ public class TwitpicService implements Runnable
 			queue.add(pic);
 		}
 	}
-	
+
 	/**
 	 * Queue pic to be twitted by thread.
 	 * 
-	 * @param pic to be twitted.
-	 */	
+	 * @param pic
+	 */
 	public void queue(byte[] pic)
 	{
 		queue((Object) pic);
 	}
-	
+
 	/**
 	 * Queue pic to be twitted by thread.
 	 * 
-	 * @param pic to be twitted.
+	 * @param pic
 	 */
 	public void queue(File pic)
 	{
@@ -191,41 +263,40 @@ public class TwitpicService implements Runnable
 	//////////////
 	// Runnable //
 	//////////////
-	
+
+	/**
+	 * Thread routine.
+	 */
 	@Override
 	public void run()
 	{
 		while (!done) {
 			Object pic;
-			
+
 			synchronized (queue) {
 				pic = queue.peek();
 			}
-			
-			try {
-				
-				if (pic != null) {
+
+			if (pic != null) {
+				try {
 					twit(pic);
-				
-					synchronized (queue) {
-						queue.poll();
-					}
+				}
+
+				catch (TwitterException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+				synchronized (queue) {
+					queue.poll();
 				}
 			}
-			
-			catch (IOException e) {
-				// keep retrying
-			}
-			
-			catch (TwitPicException e) {
-				// keep retrying
-			}
-			
+
 			// avoid hurting teh server
 			try {
 				Thread.sleep(delay);
 			}
-			
+
 			catch (InterruptedException e) {
 				// this will simply cancel sleeping
 			}

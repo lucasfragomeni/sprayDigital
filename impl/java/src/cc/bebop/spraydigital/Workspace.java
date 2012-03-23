@@ -91,13 +91,16 @@ public class Workspace implements ButtonListener, ColorListener
 		imageNoticeUndo = papp.loadImage("imageNoticeUndo.png");
 		
 		// EXPERIMENTAL: twitpic
-		if (props.getProperty("twitpic.enable").equals("true")) {
+		if (props.getProperty("TwitpicService.enable").equals("true")) {
 			TwitpicService.init(
-					props.getProperty("twitpic.user"),
-					props.getProperty("twitpic.pass"),
-					props.getProperty("twitpic.text"),
-					Long.parseLong(props.getProperty("twitpic.delay"))
-					);
+					props.getProperty("TwitpicService.consumerKey"),
+					props.getProperty("TwitpicService.consumerSecret"),
+					props.getProperty("TwitpicService.accessToken"),
+					props.getProperty("TwitpicService.accessTokenSecret"),
+					props.getProperty("TwitpicService.twitpicAPIKey"),
+					props.getProperty("TwitpicService.caption"),
+					Long.parseLong(props.getProperty("TwitpicService.delay"))
+			);
 		}
 		
 		this.papp = papp;
@@ -164,8 +167,8 @@ public class Workspace implements ButtonListener, ColorListener
 		papp.saveFrame(path);
 		
 		// EXPERIMENTAL: twitpic
-		if (props.getProperty("twitpic.enable").equals("true")) {
-			TwitpicService.getInstance().queue(new File(path));
+		if (props.getProperty("TwitpicService.enable").equals("true")) {
+			TwitpicService.getInstance().queue(new File(papp.sketchPath + "/" + path));
 		}
 		
 		actionClean();

@@ -31,6 +31,10 @@
 	<classpathentry kind="lib" path="lib/libTUIO.jar"/>
 	<classpathentry kind="lib" path="lib/TUIO.jar"/>
 	<classpathentry kind="lib" path="lib/processing/lib/core.jar"/>
-	<classpathentry kind="lib" path="lib/twitpic4j.jar"/>
+	<classpathentry kind="lib" path="lib/twitter/twitter4j-async-2.2.5.jar"/>
+	<classpathentry kind="lib" path="lib/twitter/twitter4j-core-2.2.5.jar" sourcepath="C:/Users/Igor/Desktop/twitter4j/twitter4j-core"/>
+	<classpathentry kind="lib" path="lib/twitter/twitter4j-examples-2.2.5.jar"/>
+	<classpathentry kind="lib" path="lib/twitter/twitter4j-media-support-2.2.5.jar"/>
+	<classpathentry kind="lib" path="lib/twitter/twitter4j-stream-2.2.5.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
