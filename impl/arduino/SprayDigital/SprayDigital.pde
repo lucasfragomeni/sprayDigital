@@ -5,7 +5,7 @@
 const byte INIT = 1;
 const byte ACK = 2;
 
-const int LED_INIT = 11;
+const int LED_INIT = 13;
 const int LED_ACK = 12;
 
 const long DELAY_TIMEOUT = 30000;
