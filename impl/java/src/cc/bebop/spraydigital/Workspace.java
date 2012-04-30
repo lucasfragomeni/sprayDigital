@@ -55,6 +55,7 @@ public class Workspace implements ButtonListener, ColorListener
 	 * 
 	 */
 	PImage
+		imageBackground,
 		imageNoticeSave,
 		imageNoticeClean,
 		imageNoticeUndo
@@ -85,6 +86,8 @@ public class Workspace implements ButtonListener, ColorListener
 			System.out.println("Ocorreu um erro ao carregar o arquivo de propriedades: " + e.getMessage());
 			e.printStackTrace();
 		}
+		
+		imageBackground = papp.loadImage(props.getProperty("background_image"));
 		
 		imageNoticeSave = papp.loadImage("imageNoticeSave.png");
 		imageNoticeClean = papp.loadImage("imageNoticeClean.png");
@@ -192,7 +195,7 @@ public class Workspace implements ButtonListener, ColorListener
 	public void actionClean()
 	{
 		canvas.reset();
-		papp.image(papp.loadImage("brickwall.jpg"), 0, 0);
+		papp.image(imageBackground, 0, 0);
 		canvas.histClear();
 		canvas.histAdd();
 	}
