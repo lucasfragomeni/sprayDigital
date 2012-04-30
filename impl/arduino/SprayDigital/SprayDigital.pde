@@ -182,6 +182,15 @@ int lerCor() {
   }
   int leituraCor = moda(amostragemCor, sizeof(amostragemCor)/sizeof(int));
 
+  /*
+   * WARNING: __Golden__ code bellow
+   *
+   * Those were __logarithmic__ potentiometers, in which teh difference between
+   * two angles would be directly proportional to teh difference between
+   * exp(leituraCor).
+   *
+   */
+#if 0
   //Os potenciometros que comprei tem um erro que
   //ate a metade do seletor, retorna 2/10 do maximo
   if(leituraCor <= METADE_SELETOR_COR) {
@@ -189,6 +198,10 @@ int lerCor() {
   } else {
     return map(leituraCor, METADE_SELETOR_COR, 1023, 7, 15);
   }
+#endif
+
+  /* New __linear__ potentiometer */
+  return map(leituraCor, 0, 1023, 0, 15);
 }
 
 int lerDistancia() {

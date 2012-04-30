@@ -163,7 +163,17 @@ public class Workspace implements ButtonListener, ColorListener
 
 	public void actionSave()
 	{
-		String path = props.getProperty("savePrefix") + System.currentTimeMillis() + ".jpg";
+		//String path = props.getProperty("savePrefix") + System.currentTimeMillis() + ".jpg";
+		String path;
+		
+		long t, secs, msecs;
+		
+		t = System.currentTimeMillis();
+		
+		secs = t / 1000;
+		msecs = t % 1000;
+		
+		path = props.getProperty("savePrefix") + secs + "_" + msecs + ".jpg";
 		papp.saveFrame(path);
 		
 		// EXPERIMENTAL: twitpic
