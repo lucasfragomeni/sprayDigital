@@ -6,7 +6,6 @@ import krister.Ess.AudioChannel;
 import krister.Ess.Ess;
 import processing.core.PApplet;
 import processing.core.PImage;
-import cc.bebop.processing.util.ObjectUtil;
 import cc.bebop.spraydigital.event.DistanceEvent;
 import cc.bebop.spraydigital.event.DistanceListener;
 import ddf.minim.AudioSnippet;
@@ -155,11 +154,6 @@ public class Canvas extends UIComponent implements DistanceListener {
 		papp.delay(2000);
 		canshake.play();
 		canshake.rewind();
-	}
-
-	public boolean isOver(Cursor cursor)
-	{
-		return ObjectUtil.isOver((float) this.x2, (float) this.y2, cursor.x, cursor.y, this.width, this.height);
 	}
 
 	//////////////////

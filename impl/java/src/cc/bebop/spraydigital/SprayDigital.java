@@ -5,9 +5,6 @@ import TUIO.TuioCursor;
 import TUIO.TuioObject;
 import TUIO.TuioProcessing;
 import TUIO.TuioTime;
-//import cc.bebop.util.Smoother;
-
-//import cc.bebop.processing.util.*;
 
 /**
  * @author IGOrrrr
@@ -18,7 +15,6 @@ public class SprayDigital extends PApplet {
 	
 	TuioProcessing tuio;
 	Workspace workspace;
-	// Smoother smoother;
 
 	///////////
 	// Setup //
@@ -52,7 +48,6 @@ public class SprayDigital extends PApplet {
 
 		tuio = new TuioProcessing(this);
 		workspace = new Workspace(this);
-		// smoother = new Smoother();
 
 		// ((PGraphicsOpenGL) g).gl.glDisable(GL.GL_LIGHTING);
 		// ((PGraphicsOpenGL) g).gl.glDisable(GL.GL_CULL_FACE);
@@ -66,29 +61,9 @@ public class SprayDigital extends PApplet {
 	@Override
 	public void draw() {
 		try {
-			if (addCursor) {
-				if (workspace != null) {
-					workspace.addCursor(cursor);
-				}
-				addCursor = false;
+			synchronized (cursor) {
+				workspace.draw();
 			}
-
-			else if (updateCursor) {
-				if (workspace != null) {
-					workspace.updateCursor(cursor);
-				}
-				updateCursor = false;
-			}
-
-			else if (removeCursor) {
-				if (workspace != null) {
-					workspace.removeCursor(cursor);
-				}
-				cursor = null;
-				removeCursor = false;
-			}
-
-			workspace.draw();
 		}
 		
 		catch (Exception e) {
@@ -108,57 +83,66 @@ public class SprayDigital extends PApplet {
 	// TUIO //
 	//////////
 
-	Cursor cursor;
+	Cursor cursor = new Cursor(0, 0, 0);
 	boolean addCursor = false;
 	boolean updateCursor = false;
 	boolean removeCursor = false;
+	
+	private void setCursorXYScaled(TuioCursor tcursor)
+	{
+		cursor.setX(tcursor.getX() * screenWidth);
+		cursor.setY(tcursor.getY() * screenHeight);
+	}
 
-	public void addTuioCursor(TuioCursor tuioCursor) {
-		if (cursor == null) {
-			// smoother = new Smoother(tuioCursor.getScreenX(width),
-			// tuioCursor.getScreenY(height));
-			// cursor = new Cursor(smoother.getSmoothedX(),
-			// smoother.getSmoothedY(), tuioCursor.getCursorID());
-			cursor = new Cursor(tuioCursor.getScreenX(width),
-					tuioCursor.getScreenY(height), tuioCursor.getCursorID());
-			addCursor = true;
+	public void addTuioCursor(TuioCursor tcursor)
+	{
+		synchronized (cursor) {
+			if (cursor.getCursorID() != 0)
+				return;
+			
+			setCursorXYScaled(tcursor);
+			cursor.setCursorID(tcursor.getCursorID());
+			workspace.addCursor(cursor);
+		}
+	}
+	
+	public void updateTuioCursor(TuioCursor tcursor)
+	{
+		synchronized (cursor) {
+			if (cursor.getCursorID() != tcursor.getCursorID())
+				return;
+			
+			setCursorXYScaled(tcursor);
+			workspace.updateCursor(cursor);
 		}
 	}
 
-	public void updateTuioCursor(TuioCursor tuioCursor) {
-		if (cursor != null) {
-			// smoother.smooth(tuioCursor.getScreenX(width),
-			// tuioCursor.getScreenY(height));
-			// cursor.setX(smoother.getSmoothedX());
-			// cursor.setY(smoother.getSmoothedY());
-			cursor.setX(tuioCursor.getScreenX(width));
-			cursor.setY(tuioCursor.getScreenY(height));
-			updateCursor = true;
+	public void removeTuioCursor(TuioCursor tcursor)
+	{
+		synchronized (cursor) {
+			if (cursor.getCursorID() != tcursor.getCursorID())
+				return;
+			
+			setCursorXYScaled(tcursor);
+			workspace.removeCursor(cursor);
+			cursor.setCursorID(0);
 		}
 	}
 
-	public void removeTuioCursor(TuioCursor tuioCursor) {
-		if (cursor != null) {
-			// smoother.smooth(tuioCursor.getScreenX(width),
-			// tuioCursor.getScreenY(height));
-			// cursor.setX(smoother.getSmoothedX());
-			// cursor.setY(smoother.getSmoothedY());
-			cursor.setX(tuioCursor.getScreenX(width));
-			cursor.setY(tuioCursor.getScreenY(height));
-			removeCursor = true;
-		}
+	public void addTuioObject(TuioObject tobj)
+	{
 	}
 
-	public void addTuioObject(TuioObject tobj) {
+	public void refresh(TuioTime btime)
+	{
 	}
 
-	public void refresh(TuioTime btime) {
+	public void removeTuioObject(TuioObject tobj)
+	{
 	}
 
-	public void removeTuioObject(TuioObject tobj) {
-	}
-
-	public void updateTuioObject(TuioObject tobj) {
+	public void updateTuioObject(TuioObject tobj)
+	{
 	}
 
 	////////////////

@@ -2,7 +2,6 @@ package cc.bebop.spraydigital;
 
 import processing.core.PApplet;
 import processing.core.PImage;
-import cc.bebop.processing.util.ObjectUtil;
 
 public class Menu extends UIComponent {
 
@@ -74,10 +73,6 @@ public class Menu extends UIComponent {
 //				papp.ellipse(x, y, width, height);
 //			}
 //		}
-	}
-
-	public boolean isOver(Cursor cursor) {
-		return ObjectUtil.isOver(x, y, cursor.getX(), cursor.getY(), width/2);
 	}
 
 	public void hide() {

@@ -5,7 +5,6 @@ import java.util.List;
 
 import processing.core.PApplet;
 import processing.core.PImage;
-import cc.bebop.processing.util.ObjectUtil;
 import cc.bebop.spraydigital.event.ColorEvent;
 import cc.bebop.spraydigital.event.ColorListener;
 
@@ -14,7 +13,7 @@ public class PalhetaCores extends UIComponent implements ColorListener {
 	private static final long DELAY_SELECAO_COR = 1500;
 
 	private int indiceCor;
-	private PImage imgMenu;
+	//private PImage imgMenu;
 	private PImage imgPalhetaCores;
 	private PImage imgSeletorCor;
 	private PImage imgBebop;
@@ -35,7 +34,7 @@ public class PalhetaCores extends UIComponent implements ColorListener {
 
 	public PalhetaCores(PApplet pApplet) {
 		super(pApplet);
-		this.imgMenu = pApplet.loadImage("menu_03.png");
+		//this.imgMenu = pApplet.loadImage("menu_03.png");
 		this.imgPalhetaCores = pApplet.loadImage("palhetaCores.png");
 		this.imgSeletorCor = pApplet.loadImage("spraycan.png");
 		this.imgBebop = pApplet.loadImage("bebop.png");
@@ -86,12 +85,6 @@ public class PalhetaCores extends UIComponent implements ColorListener {
 
 	public boolean isVisible() {
 		return visible;
-	}
-
-	public boolean isOver(Cursor cursor) {
-		int posX = papp.screenWidth/2;
-		int posY = papp.screenHeight;
-		return ObjectUtil.isOver(posX, posY, cursor.getX(), cursor.getY(), imgMenu.width/2);
 	}
 
 	public void onClick(Cursor cursor) {
