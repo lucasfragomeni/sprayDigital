@@ -125,8 +125,6 @@ public class Workspace implements ButtonListener, ColorListener
 				Integer.parseInt(props.getProperty("canvas.discharge"))
 		);
 		
-		canvas.setBrush(brush);
-		
 		//System.err.println("3 TIEM: " + System.currentTimeMillis());
 
 		palhetaCores = new PalhetaCores(papp);

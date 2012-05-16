@@ -10,8 +10,14 @@ import TUIO.TuioTime;
  * @author IGOrrrr
  * 
  */
-public class SprayDigital extends PApplet {
+public class SprayDigital extends PApplet
+{
 	private static final long serialVersionUID = 1L;
+
+	Cursor cursor = new Cursor(0, 0, 0);
+	boolean addCursor = false;
+	boolean updateCursor = false;
+	boolean removeCursor = false;
 	
 	TuioProcessing tuio;
 	Workspace workspace;
@@ -60,14 +66,14 @@ public class SprayDigital extends PApplet {
 
 	@Override
 	public void draw() {
-		try {
-			synchronized (cursor) {
+		synchronized (cursor) {
+			try {
 				workspace.draw();
 			}
-		}
-		
-		catch (Exception e) {
-			e.printStackTrace();
+			
+			catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -82,11 +88,6 @@ public class SprayDigital extends PApplet {
 	//////////
 	// TUIO //
 	//////////
-
-	Cursor cursor = new Cursor(0, 0, 0);
-	boolean addCursor = false;
-	boolean updateCursor = false;
-	boolean removeCursor = false;
 	
 	private void setCursorXYScaled(TuioCursor tcursor)
 	{

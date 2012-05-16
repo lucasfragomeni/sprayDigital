@@ -18,23 +18,20 @@ public class Canvas extends UIComponent implements DistanceListener {
 	private AudioSnippet canshake;
 	private AudioSnippet emptycan;
 	private AudioChannel airspray;
-
-	private Cursor cursorAtual;
 	
-	private double
-			x1, x2,
-			y1, y2,
-			z1, z2,
-			r1, r2
-			;
+	private double x1, x2;
+	private double y1, y2;
+	private double r1, r2;
 	
-	private long
-			t1, t2
-			;
+	private long t1, t2;
 	
 	private int Q = 30000;
 
 	private double K = Math.tan(Math.PI / 4) / 6;
+
+	private boolean spraying = false;
+
+	private Brush brush = new Brush(papp);
 	
 	/*
 	 * historico de modificações da imagem
@@ -67,8 +64,6 @@ public class Canvas extends UIComponent implements DistanceListener {
 		papp.image(hist.getFirst(), 0, 0);
 		return hist.size();
 	}
-
-	private Brush brush;
 	
 	/////////////////
 	// Constructor //
@@ -82,69 +77,37 @@ public class Canvas extends UIComponent implements DistanceListener {
 		this.Q = Q;
 		// TODO: this.K = K;
 		
-		z2 = 100;
-		r2 = z2 * K;
-		
-		z1 = z2;
-		z1 = z1 + 0;
-		r1 = r2;
+		putXY(0, 0);
+		putZ(0);
+		shiftXYZ();
 		
 		hist = new LinkedList<PImage>();
 		histClear();
 		histAdd();
 	}
 
-	public void setBrush(Brush brush) 
-	{
-		this.brush = brush;
-	}
-
-	boolean cursorAtualizado = true;
-	
-	private static final int cursorTimeout = 50;
-
 	public void draw()
 	{
-//		long T1, T2;
-//		
-//		T1 = System.currentTimeMillis();
+		t2 = papp.millis();
 		
-		if(cursorAtual == null)
-		{
-			if(cursorAtualizado)
-			{
-				airspray.stop();
-				
-				cursorAtualizado = false;
-			}
+		if (spraying) {
+			// sound on!
+			loop(airspray);
 			
-			return;
+			//System.err.printf("{%f, %f, %f} {%f, %f, %f} {%d}\n", x1, y1, r1, x2, y2, r2, (int) ((Q * (t2 - t1)) / 1000));
+			
+			brush.sprayLine(x1, y1, r1, x2, y2, r2,
+					(int) ((Q * (t2 - t1)) / 1000));
+
+			shiftXYZ();
 		}
 		
-		if((!cursorAtualizado) && ((papp.millis() - t1) < cursorTimeout))
-			return;
+		else {
+			// sound off!
+			airspray.stop();
+		}
 		
-		cursorAtualizado = false;
-		
-		t2 = papp.millis();
-				
-		//System.err.printf("sprayLine(\n%f, %f, %f, \n%f, %f, %f, \n%f)\n", x1, y1, r1, x2, y2, r2, Q);
-		
-		brush.sprayLine(
-				x1, y1, r1,
-				x2, y2, r2,
-				(int) ((Q * (t2 - t1)) / 1000)
-				);
-
-		x1 = x2;
-		y1 = y2;
-		z1 = z2;
-		r1 = r2;
 		t1 = t2;
-		
-//		T2 = System.currentTimeMillis();
-//		
-//		System.err.println("TIEM " + (T2 - T1));
 	}
 
 	void reset()
@@ -155,6 +118,29 @@ public class Canvas extends UIComponent implements DistanceListener {
 		canshake.play();
 		canshake.rewind();
 	}
+	
+	////////////////////
+	// point handling //
+	////////////////////
+	
+	private void shiftXYZ()
+	{
+		x1 = x2;
+		y1 = y2;
+		r1 = r2;
+	}
+	
+	private void putXY(float x, float y)
+	{
+		x2 = x;
+		y2 = y;
+	}
+	
+	private void putZ(float z)
+	{
+		r2 = z * K;
+		r2 = Math.max(15, Math.min(r2, 200));
+	}
 
 	//////////////////
 	// Cursor Event //
@@ -162,80 +148,26 @@ public class Canvas extends UIComponent implements DistanceListener {
 
 	public void addCursor(Cursor cursor)
 	{
-		// FIXME: sanity check!
-		//assert (cursor != null);
+		//if(emptycan.isPlaying() || canshake.isPlaying())
+		//		return;
 		
-		if(cursorAtual != null)
-			return;
+		putXY(cursor.getX(), cursor.getY());
+		shiftXYZ();
+		
+		spraying = true;
 
-		if(emptycan.isPlaying() || canshake.isPlaying())
-				return;
-		
-		//System.err.printf("add cursor: (%f, %f)\n", cursor.getX(), cursor.getY());
-			
-		cursorAtual = cursor;
-				
-		x2 = cursorAtual.getX();
-		y2 = cursorAtual.getY();
-		t2 = papp.millis();
-
-		x1 = x2;
-		y1 = y2;
-		t1 = t2;
-
-		loop(airspray);
-		//airspray.loop();
-		
-		cursorAtualizado = true;
-		
-		//System.err.println("add:\t" + x2 + ",\t" + y2);
 	}
 
 	public void updateCursor(Cursor cursor)
 	{
-		// FIXME: this is happening. Check.
-		//assert (cursor != null);
-		
-		if(cursorAtual == null)
-			return;
-		
-		if(!cursorAtual.equals(cursor))
-			return;
-		
-		//System.err.printf("update cursor: (%f, %f)\n", cursor.getX(), cursor.getY());
-		
-		x2 = cursorAtual.getX();
-		y2 = cursorAtual.getY();
-		t2 = papp.millis();
-		
-		cursorAtualizado = true;
-		
-		//System.err.println("up:\t" + x2 + ",\t" + y2);
+		putXY(cursor.getX(), cursor.getY());
 	}
 
 	public void removeCursor(Cursor cursor)
 	{
-		if(cursorAtual == null)
-			return;
-		
-		if(!cursorAtual.equals(cursor))
-			return;
-		
-		//System.err.printf("remove cursor: \n");
-		
-		airspray.stop();
-		
-		x2 = cursorAtual.getX();
-		y2 = cursorAtual.getY();
-		t2 = papp.millis();
-		
-		cursorAtual = null;
+		spraying = false;
 		
 		histAdd();
-		
-		cursorAtualizado = true;
-		
-		//System.err.println("remove:\t" + x2 + ",\t" + y2);
 	}
 	
 	//////////////////
@@ -244,8 +176,7 @@ public class Canvas extends UIComponent implements DistanceListener {
 
 	public void distanceChanged(DistanceEvent event)
 	{
-		z2 = event.getDistance();
-		r2 = z2 * K;
+		putZ(event.getDistance());
 	}
 
 	/////////////////////
